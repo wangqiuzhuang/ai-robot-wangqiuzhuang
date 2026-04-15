@@ -1,4 +1,4 @@
-# AI机器人课程 - 每周作业提交
+# shinhan university - AI机器人课程 - 每周作业提交
 
 ## 基本信息
 - 姓名: 王秋壮 | WANG QIUZHUANG | 왕추장 
@@ -17,4 +17,4 @@
 
 ## 运行结果
 - Python: python --version
-- ROS2: 
+- ROS2:
