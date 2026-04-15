@@ -19,3 +19,5 @@
 
 ## 作业描述  
 指挥机器手臂动起来 展示轨迹即可   画正圆比较困难
+
+<img width="1106" height="848" alt="image" src="https://github.com/user-attachments/assets/830d8fbe-7b80-4aac-9edc-c8fa83813ca4" />
