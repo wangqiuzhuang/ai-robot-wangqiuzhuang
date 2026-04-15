@@ -11,3 +11,7 @@
 5. Ubuntu 账号密码信息备忘
 - 账号：wan********ng
 - 密码：0****7
+## 作业描述及截图 
+启动小乌龟界面
+<img width="1255" height="711" alt="image" src="https://github.com/user-attachments/assets/4a1db543-c510-4cc8-8c5c-777636f58675" />
+
