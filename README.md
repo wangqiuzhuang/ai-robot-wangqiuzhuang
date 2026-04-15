@@ -1,9 +1,9 @@
-# shinhan university - AI机器人课程 - 每周作业提交
+# shinhan university - AI robot - 每周作业提交
 
 ## 基本信息
 - 姓名: 王秋壮 | WANG QIUZHUANG | 왕추장 
 - 学号: 20232002
-- 作业周期：2026第一学期
+- 课程：AI robot
 
 ## 环境信息
 - 操作系统: Windows 11 + WSL2 / macOS / Ubuntu 22.04
