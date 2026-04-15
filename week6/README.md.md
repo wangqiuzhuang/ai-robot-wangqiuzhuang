@@ -11,7 +11,7 @@
 2. rqt
 
 ## 作业描述  
-将车辆摄像头不同视角进行截图展示
+将车辆摄像头不同视角进行截图展示  
 ros2:
 <img width="2212" height="1324" alt="image" src="https://github.com/user-attachments/assets/d26e2f90-6b26-4308-a219-c2c4feb96e10" />
 rqt:
