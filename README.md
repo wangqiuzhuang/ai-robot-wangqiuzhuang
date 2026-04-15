@@ -1,9 +1,9 @@
-# AI机器人课程 - 第1周作业
+# AI机器人课程 - 每周作业提交
 
 ## 基本信息
-- 姓名: 王秋壮
+- 姓名: 王秋壮 | WANG QIUZHUANG | 왕추장 
 - 学号: 20232002
-- 日期: 2026-03-11
+- 作业周期：2026第一学期
 
 ## 环境信息
 - 操作系统: Windows 11 + WSL2 / macOS / Ubuntu 22.04
@@ -11,10 +11,10 @@
 - Python版本: 3.10/3.11
 
 ## 安装系统
-- [x] Python3 + VSCode
-- [x] ROS2 (WSL2/Docker/双系统)
-- [ ] OpenCLAW (可选)
+- [√] Python3 + VSCode
+- [√] ROS2 (WSL2)
+- [√] OpenCLAW 
 
 ## 运行结果
-- Python: `python --version` 截图（经沟通暂无需提交）
-- ROS2: 见截图部分
+- Python: python --version
+- ROS2: 
