@@ -11,4 +11,5 @@
 
 ## 作业描述  
 docker中运行小乌龟截图
-![alt text](快速开始截图.png) ![alt text](docker中运行小乌龟程序.png)
+<img width="1721" height="978" alt="docker中运行小乌龟程序" src="https://github.com/user-attachments/assets/8e932eb6-2ead-4512-8b3d-e8d297ec2bcb" />
+
