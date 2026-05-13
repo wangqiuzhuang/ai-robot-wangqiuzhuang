@@ -18,15 +18,5 @@
 ## 运行结果
 - Python: python --version
 - ROS2:
-## 课件：https://course.a-real.me/content/week11.html
-### week1作业详情
-### [week2作业详情;](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week2/README.md)
-### week3作业详情
-### week4作业详情
-### week5作业详情
-### week6作业详情
-### week7作业详情
-### week8作业详情
-### week9作业详情
-### week10作业详情
-### week11作业详情
+每周作业详情：
+https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week2/README.md
