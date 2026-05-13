@@ -19,4 +19,4 @@
 - Python: python --version
 - ROS2:  
 ### 每周作业详情：
-- week2   https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week2/README.md
+- week2https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week2/README.md
