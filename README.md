@@ -20,7 +20,7 @@
 - ROS2:
 ## 课件：https://course.a-real.me/content/week11.html
 ### week1作业详情
-### week2作业详情
+### [week2作业详情;](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week2/README.md)
 ### week3作业详情
 ### week4作业详情
 ### week5作业详情
