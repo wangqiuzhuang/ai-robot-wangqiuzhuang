@@ -17,6 +17,6 @@
 
 ## 运行结果
 - Python: python --version
-- ROS2:
-每周作业详情：
-https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week2/README.md
+- ROS2:  
+### 每周作业详情：
+- https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week2/README.md
