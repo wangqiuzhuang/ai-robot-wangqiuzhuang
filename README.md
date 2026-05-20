@@ -17,4 +17,15 @@
 
 ## 运行结果
 - Python: python --version
-- ROS2:
+- ROS2:  
+### 每周作业详情：
+#### [week1作业详情](没作业)  
+#### [week2作业详情](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week2/README.md)  
+#### [week3作业详情](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week3/README.md)  
+#### [week4作业详情](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week4/README.md)
+#### [week5作业详情](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week5/README.md)
+#### [week6作业详情](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week6/README.md)
+#### [week7作业详情](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week7/README.md)
+#### [week10作业详情](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week10/README.md)
+#### [week11作业详情](https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang/blob/main/week11/README.md)
+
