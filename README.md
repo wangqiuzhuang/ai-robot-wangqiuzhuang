@@ -7,15 +7,15 @@
 
 * **姓名/学号**: 王秋壮 (Wang Qiuzhuang)
 * **专业背景**: 软件工程 (Software Engineering)
-* **核心技术栈**: 
-  * `Robotics`: ROS2, Docker 容器化部署, 机器人运动学仿真
+* **核心技术栈**: ROS2, Docker 容器化部署, 机器人运动学仿真
+* 
   ---
 
 ## 📈 课程任务导航与工程进度
 
 | 周次 (Timeline) | 实验/工程名称 (Project Title) | 核心技术栈 (Tech Stack) | 状态 (Status) | 笔记链接 (Notes) |
 | :--- | :--- | :--- | :---: | :---: |
-| **Week 01** | 基础环境搭建与工程工具 | `WSL2` `Ubuntu` `Git` `Markdown` | ✅ Done | 第一周无课 |
+| **Week 01** | 基础环境搭建与工程工具 | `WSL2` `Ubuntu` `Git` `Markdown` | ✅ Done |  |
 | **Week 02** | ROS2 环境配置与基础 CLI | `ROS2 Humble` `CLI` `Colcon` | ✅ Done | [查看笔记](week2/README.md) |
 | **Week 03** | 机器人运动学核心概念 | `Kinematics` `TF2` `URDF` | ✅ Done | [查看笔记](week3/README.md) |
 | **Week 04** | 机器视觉与 OpenCV 基础实验 | `OpenCV` `Python` `Image Processing` | ✅ Done | [查看笔记](week4/README.md) |
@@ -23,7 +23,7 @@
 | **Week 06** | 传感器数据处理与 KITTI 数据集实验 | `KITTI Dataset` `LiDAR` `RViz2` | ✅ Done | [查看笔记](week6/README.md) |
 | **week 07** | *（中间周次根据你的实际情况补充）* | ... | ✅ Done | [查看笔记](week7/README.md) |
 | **week 08** | *（中间周次根据你的实际情况补充）* | ... | ✅ Done | [查看笔记](week8/README.md) |
-| **week 09** | ** | ... | ✅ Done |第九周无课 |
+| **week 09** | ... | ... | ✅ Done | |
 | **week 10** | *（中间周次根据你的实际情况补充）* | ... | ✅ Done | [查看笔记](week10/README.md) |
 | **week 11** | *（中间周次根据你的实际情况补充）* | ... | ✅ Done | [查看笔记](week11/README.md) |
 | **Week 12** | 四足机器人步态规划与高级仿真 (冲A+核心) | `Webots/Gazebo` `Quadruped` `Gait Planning` | ⏳ Optimizing | [查看笔记](week12/README.md) |
