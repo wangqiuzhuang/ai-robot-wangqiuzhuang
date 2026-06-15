@@ -21,4 +21,4 @@ relative_links:
 # 排除不需要渲染的文件
 exclude:
   - .gitignore
-  - README.md
+  - week13/.gitignore
