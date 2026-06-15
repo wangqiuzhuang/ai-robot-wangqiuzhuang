@@ -1,48 +1,119 @@
 # 🤖 AI 机器人课程实验与研究笔记
 
-欢迎来到我的 AI 机器人课程学习与实践仓库。本项目完整记录了课程期间的所有实验、核心配置、踩坑记录以及高级仿真成果。
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-在线预览-brightgreen)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
+[![Weeks Completed](https://img.shields.io/badge/已完成-13%2F15周-blue)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
+[![Last Update](https://img.shields.io/badge/更新-2026.06-orange)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
+
+欢迎来到我的 AI 机器人课程学习与实践仓库。本项目完整记录了 **AI机器人2603学期** 课程期间的所有实验、核心配置、踩坑记录以及高级仿真成果。
+
+> 🌐 **在线预览**: [https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
 
 ---
-## 👤 个人信息与技术背景 (Profile)
 
-* **姓名/学号**: 王秋壮 (Wang Qiuzhuang)
-* **专业背景**: 软件工程 (Software Engineering)
-* **核心技术栈**: ROS2, Docker 容器化部署, 机器人运动学仿真
-* 
-  ---
+## 👤 个人信息与技术背景
+
+| 项目 | 内容 |
+|:---|:---|
+| **姓名** | 王秋壮 (Wang Qiuzhuang) |
+| **专业** | 软件工程 (Software Engineering) |
+| **核心方向** | ROS2 机器人开发、Docker 容器化部署、机器人运动学仿真 |
+| **开发环境** | WSL2 + Ubuntu 22.04 LTS, VS Code |
+
+---
 
 ## 📈 课程任务导航与工程进度
 
-| 周次 (Timeline) | 实验/工程名称 (Project Title) | 核心技术栈 (Tech Stack) | 状态 (Status) | 笔记链接 (Notes) |
-| :--- | :--- | :--- | :---: | :---: |
-| **Week 01** | 基础环境搭建与工程工具 | `WSL2` `Ubuntu` `Git` `Markdown` | ✅ Done |  |
-| **Week 02** | ROS2 环境配置与基础 CLI | `ROS2 Humble` `CLI` `Colcon` | ✅ Done | [查看笔记](week2/README.md) |
-| **Week 03** | 机器人运动学核心概念 | `Kinematics` `TF2` `URDF` | ✅ Done | [查看笔记](week3/README.md) |
-| **Week 04** | 机器视觉与 OpenCV 基础实验 | `OpenCV` `Python` `Image Processing` | ✅ Done | [查看笔记](week4/README.md) |
-| **Week 05** | Docker 容器化与 ROS2 桌面环境部署 | `Docker` `Dockerfile` `X11-Forwarding` | ✅ Done | [查看笔记](week5/README.md) |
-| **Week 06** | 传感器数据处理与 KITTI 数据集实验 | `KITTI Dataset` `LiDAR` `RViz2` | ✅ Done | [查看笔记](week6/README.md) |
-| **week 07** | *（中间周次根据你的实际情况补充）* | ... | ✅ Done | [查看笔记](week7/README.md) |
-| **week 08** | *（中间周次根据你的实际情况补充）* | ... | ✅ Done | [查看笔记](week8/README.md) |
-| **week 09** | ... | ... | ✅ Done | |
-| **week 10** | *（中间周次根据你的实际情况补充）* | ... | ✅ Done | [查看笔记](week10/README.md) |
-| **week 11** | *（中间周次根据你的实际情况补充）* | ... | ✅ Done | [查看笔记](week11/README.md) |
-| **Week 12** | 四足机器人步态规划与高级仿真 (冲A+核心) | `Webots/Gazebo` `Quadruped` `Gait Planning` | ⏳ Optimizing | [查看笔记](week12/README.md) |
-| **week 13** | *（中间周次根据你的实际情况补充）* | ... | ✅ Done | [查看笔记](week13/README.md) |
-| **week 14** | *（待补充）* | ... |⏳ Optimizing |  |
-| **week 15** | *（待补充）* | ... |⏳ Optimizing | |
-
+| 周次 | 实验/工程名称 | 核心技术栈 | 状态 | 笔记链接 |
+|:---:|:---|:---|:---:|:---:|
+| **Week 01** | 基础环境搭建与工程工具 | `WSL2` `Ubuntu` `Git` `Markdown` | ✅ Done | [📝 查看笔记](week1/README.md) |
+| **Week 02** | ROS2 环境配置与基础 CLI | `ROS2 Humble` `CLI` `Colcon` | ✅ Done | [📝 查看笔记](week2/README.md) |
+| **Week 03** | 机器人运动学核心概念 | `Kinematics` `TF2` `URDF` | ✅ Done | [📝 查看笔记](week3/README.md) |
+| **Week 04** | 机器视觉与 OpenCV 基础实验 | `OpenCV` `Python` `Image Processing` | ✅ Done | [📝 查看笔记](week4/README.md) |
+| **Week 05** | Docker 容器化与 ROS2 桌面环境部署 | `Docker` `Dockerfile` `X11-Forwarding` | ✅ Done | [📝 查看笔记](week5/README.md) |
+| **Week 06** | 传感器数据处理与 KITTI 数据集实验 | `KITTI Dataset` `LiDAR` `RViz2` | ✅ Done | [📝 查看笔记](week6/README.md) |
+| **Week 07** | Docker 容器环境与 ROS2 桌面 VNC | `Docker` `VNC` `ROS2 Desktop` | ✅ Done | [📝 查看笔记](week7/README.md) |
+| **Week 08** | ROS2 中级实践与工具链 | `Launch` `RViz2` `ROS2 Bag` | ✅ Done | [📝 查看笔记](week8/README.md) |
+| **Week 09** | 机器人仿真环境与实践 | `Gazebo` `Webots` `URDF` | ✅ Done | [📝 查看笔记](week9/README.md) |
+| **Week 10** | Docker 卷挂载与 OpenCV 图像处理 | `Docker Volume` `OpenCV` `Python` | ✅ Done | [📝 查看笔记](week10/README.md) |
+| **Week 11** | Docker 镜像持久化与 Git 仓库整理 | `Docker Commit` `GitHub Pages` | ✅ Done | [📝 查看笔记](week11/README.md) |
+| **Week 12** | 四足机器人步态规划与高级仿真 ⭐ | `Webots/Gazebo` `Quadruped` `Gait` | ⏳ Optimizing | [📝 查看笔记](week12/README.md) |
+| **Week 13** | 四足机器人仿真与强化学习 | `PyBullet` `PPO` `RL` | ✅ Done | [📝 查看笔记](week13/README.md) |
+| **Week 14** | 综合项目实战 | `待补充` | ⏳ Optimizing | |
+| **Week 15** | 期末总结与展示 | `待补充` | ⏳ Optimizing | |
 
 ---
 
 ## 🛠️ 核心技术栈与工程能力看板
 
-* **操作系统与容器**: Ubuntu 22.04 LTS, WSL2, Docker (支持 GUI 转发)
-* **机器人框架**: ROS2 (Humble / Iron)
-* **仿真环境**: Webots / Gazebo, RViz2
-* **感知与算法**: OpenCV 图像处理, 点云数据可视化
+### 操作系统与容器
+- **Ubuntu 22.04 LTS** — Linux 开发环境
+- **WSL2** — Windows 下的 Linux 子系统
+- **Docker** — 容器化部署（支持 GUI 转发、卷挂载、镜像持久化）
+
+### 机器人框架
+- **ROS2 (Humble / Iron)** — 机器人操作系统
+- **TF2** — 坐标变换管理
+- **URDF** — 机器人统一描述格式
+
+### 仿真环境
+- **PyBullet** — 物理仿真引擎
+- **Gazebo** — 3D 机器人仿真
+- **Webots** — 跨平台机器人仿真
+- **RViz2** — ROS2 3D 可视化工具
+
+### 感知与算法
+- **OpenCV** — 计算机视觉与图像处理
+- **PyTorch** — 深度学习框架
+- **Stable-Baselines3** — 强化学习算法库 (PPO)
+- **LiDAR / Point Cloud** — 传感器数据处理
+
+---
 
 ## 💡 本仓库核心亮点
 
-1. **工业级规范**: 笔记不仅仅记录“怎么做”，更重点包含 **[原理阐述]**、**[代码逐行注释]** 和 **[踩坑与解决方案 (Troubleshooting)]**。
-2. **多媒体动静结合**: 实验结果均配备直观的 **GIF 动图** 或 **图表数据对比**，拒绝枯燥的纯文本。
-3. **绿色健康度**: 严格遵循 GitHub Pages 相对路径规范，确保 100% 图片不碎链。
+1. **工业级规范**：笔记不仅记录操作步骤，更重点包含 **原理阐述**、**代码逐行注释** 和 **踩坑与解决方案 (Troubleshooting)**
+2. **多媒体动静结合**：实验结果均配备直观的 **GIF 动图** 与 **截图对比**，拒绝枯燥的纯文本
+3. **绿色健康度**：严格遵循 GitHub Pages 相对路径规范，所有图片使用本地 `img/` 目录管理，确保 **100% 图片不碎链**
+4. **工程化结构**：按周次组织目录，每个实验独立文件夹，README 统一格式，便于课程系统自动检测和评分
+
+---
+
+## 📂 仓库结构
+
+```
+ai-robot-wangqiuzhuang/
+├── README.md              # 课程总览与导航（本页）
+├── _config.yml            # GitHub Pages Jekyll 主题配置
+├── week01/                # 每周实验独立目录
+│   ├── README.md          #   实验文档与截图
+│   └── img/               #   实验截图与动图
+├── week02/
+│   ├── README.md
+│   └── img/
+├── ...
+└── week13/
+    ├── README.md
+    ├── assets/            #   GIF 动图与图表
+    ├── demos/             #   演示脚本
+    ├── scripts/           #   工具脚本
+    └── quadruped_ppo_residual_stairs.py  # 强化学习主程序
+```
+
+---
+
+## 🚀 快速开始
+
+```bash
+# 克隆仓库
+git clone https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang.git
+
+# 进入任意周次目录查看实验笔记
+cd ai-robot-wangqiuzhuang/week12
+
+# 在线预览
+open https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/
+```
+
+---
+
+*🤖 Built with ❤️ by Wang Qiuzhuang | AI机器人2603学期 | Last updated: 2026.06*

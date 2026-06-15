@@ -1,14 +1,51 @@
-# wangqiuzhuang's 10th week's homework description  
-## 本周概览  
-- 使用 docker run -v 进行本地目录挂载  power shsell退出,则本地和远端的虚拟连接断开,如果连接成功,操作本地文件会在远端也进行相应的操作,比如本地新增一个text.txt文件,则远端也会生成;目的就是方便本地操作远端文件,即便远端文件误删除,本地也存在对应的文件;  
- ![alt text](img/本地远程文件夹绑定.png)
-- 本地创建一个py文件验证远程也出现对应的文件
-![alt text](img/本地新增py文件验证远端也会出现相应文件.png)  
-- 远程运行对应的文件  成功  
-![alt text](img/远端执行py文件发现成功.png)  
+# Week 10: Docker 卷挂载与 OpenCV 图像处理
 
-- 下载git远程cat代码,https://github.com/ndb796/Python-Data-Analysis-and-Image-Processing-Tutorial/blob/master/06.%20OpenCV%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%EA%B8%B0%EB%B3%B8%20%EC%82%AC%EC%9A%A9%EB%B2%95/OpenCV%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%EA%B8%B0%EB%B3%B8%20%EC%82%AC%EC%9A%A9%EB%B2%95.ipynb  
-![alt text](img/下载cat代码.png)
-- 运行py文件出现小猫图像  
-![alt text](img/出现小猫图片.png)
-- 注意执行过程中可能出现版本不兼容的情况   可以问下claude code将 NumPy 版本降级为1.* ,缺少 pybullet 模块 ,可以自己用指令安装.本地缺失图片可以自己在Google下载一个小猫图片.
+## 本周概览
+
+- Docker `-v` 本地目录挂载与双向同步
+- 远端文件操作与验证
+- OpenCV 图像处理入门
+- Python 依赖管理与版本兼容性问题排查
+
+## 操作步骤
+
+### 1. Docker 卷挂载 — 本地与远端文件同步
+
+使用 `docker run -v` 将本地目录挂载到容器内。挂载成功后，本地文件的修改会实时同步到远端，反之亦然。即使远端文件被误删除，本地仍保留备份。
+
+![本地远程文件夹绑定](img/本地远程文件夹绑定.png)
+
+**关键要点**：PowerShell 退出后，本地与远端的虚拟连接会断开。
+
+### 2. 文件同步验证
+
+在本地创建一个 `.py` 文件，验证远端同步出现对应文件：
+
+![本地新增py文件验证远端也会出现相应文件](img/本地新增py文件验证远端也会出现相应文件.png)
+
+### 3. 远端运行 Python 文件
+
+在远端容器中运行同步过来的 Python 文件，执行成功：
+
+![远端执行py文件发现成功](img/远端执行py文件发现成功.png)
+
+### 4. OpenCV 图像处理实验
+
+从 GitHub 下载 OpenCV 教程代码并运行，成功显示小猫图像：
+
+![下载cat代码](img/下载cat代码.png)
+
+![出现小猫图片](img/出现小猫图片.png)
+
+### 5. 踩坑记录
+
+- **NumPy 版本不兼容**：运行 OpenCV 代码时可能遇到 NumPy 版本过高的问题，可将 NumPy 降级为 1.x 版本：
+  ```bash
+  pip3 install "numpy<2"
+  ```
+- **缺少 pybullet 模块**：使用 `pip3 install pybullet` 安装
+- **缺少本地图片**：如果示例代码依赖的图片不存在，可从 Google 下载一张小猫图片替换
+
+## 总结
+
+本周掌握了 Docker 卷挂载的核心用法，实现了本地与容器间的双向文件同步；同时通过 OpenCV 教程代码的运行，完成了图像处理入门实验。版本兼容性问题的排查过程也加深了对 Python 依赖管理机制的理解。

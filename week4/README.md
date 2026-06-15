@@ -35,6 +35,6 @@
 - 运行python程序控制自己的小乌龟
 
 小乌龟走正方向：
-- <img width="1750" height="1167" alt="image" src="https://github.com/user-attachments/assets/785b31af-0039-44d9-8a56-cfa0636ae7e9" />
+- ![小乌龟走正方向](img/自己小乌龟正方形.png)
 放倒机器狗：
-<img width="2367" height="1323" alt="image" src="https://github.com/user-attachments/assets/c855bc22-7115-4a14-85d3-f24efa9b8d58" />
+![放倒机器狗](img/自己的机器狗放倒.png)

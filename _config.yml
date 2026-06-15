@@ -1,0 +1,24 @@
+# GitHub Pages Jekyll 主题配置
+theme: jekyll-theme-cayman
+
+# 网站信息
+title: AI 机器人课程实验与研究笔记
+description: 王秋壮 (Wang Qiuzhuang) 的 AI 机器人课程学习与实践仓库
+
+# 导航与链接
+github:
+  repository_url: https://github.com/wangqiuzhuang/ai-robot-wangqiuzhuang
+
+# 插件
+plugins:
+  - jekyll-relative-links
+
+# 相对链接支持
+relative_links:
+  enabled: true
+  collections: true
+
+# 排除不需要渲染的文件
+exclude:
+  - .gitignore
+  - README.md
