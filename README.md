@@ -36,7 +36,7 @@
 | **Week 09** | 机器人仿真环境与实践 | `Gazebo` `Webots` `URDF` | ✅ Done | [📝 查看笔记](week9/README.md) |
 | **Week 10** | Docker 卷挂载与 OpenCV 图像处理 | `Docker Volume` `OpenCV` `Python` | ✅ Done | [📝 查看笔记](week10/README.md) |
 | **Week 11** | Docker 镜像持久化与 Git 仓库整理 | `Docker Commit` `GitHub Pages` | ✅ Done | [📝 查看笔记](week11/README.md) |
-| **Week 12** | 四足机器人步态规划与高级仿真 ⭐ | `Webots/Gazebo` `Quadruped` `Gait` | ⏳ Optimizing | [📝 查看笔记](week12/README.md) |
+| **Week 12** | 四足机器人步态规划与高级仿真 ⭐ | `Webots/Gazebo` `Quadruped` `Gait` | ✅ Done | [📝 查看笔记](week12/README.md) |
 | **Week 13** | 四足机器人仿真与强化学习 | `PyBullet` `PPO` `RL` | ✅ Done | [📝 查看笔记](week13/README.md) |
 | **Week 14** | 综合项目实战 | `待补充` | ⏳ Optimizing | |
 | **Week 15** | 期末总结与展示 | `待补充` | ⏳ Optimizing | |
