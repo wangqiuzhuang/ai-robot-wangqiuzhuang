@@ -1,7 +1,7 @@
 # 🤖 AI 机器人课程实验与研究笔记
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-在线预览-brightgreen)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
-[![Weeks Completed](https://img.shields.io/badge/已完成-13%2F15周-blue)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
+[![Weeks Completed](https://img.shields.io/badge/已完成-15%2F15周-blue)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
 [![Last Update](https://img.shields.io/badge/更新-2026.06-orange)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
 
 欢迎来到我的 AI 机器人课程学习与实践仓库。本项目完整记录了 **AI机器人2603学期** 课程期间的所有实验、核心配置、踩坑记录以及高级仿真成果。
