@@ -25,21 +25,19 @@
 
 | 周次 | 实验/工程名称 | 核心技术栈 | 状态 | 笔记链接 |
 |:---:|:---|:---|:---:|:---:|
-| **Week 01** | 基础环境搭建与工程工具 | `WSL2` `Ubuntu` `Git` `Markdown` | ✅ Done | [📝 查看笔记](week1/README.md) |
-| **Week 02** | ROS2 环境配置与基础 CLI | `ROS2 Humble` `CLI` `Colcon` | ✅ Done | [📝 查看笔记](week2/README.md) |
-| **Week 03** | 机器人运动学核心概念 | `Kinematics` `TF2` `URDF` | ✅ Done | [📝 查看笔记](week3/README.md) |
-| **Week 04** | 机器视觉与 OpenCV 基础实验 | `OpenCV` `Python` `Image Processing` | ✅ Done | [📝 查看笔记](week4/README.md) |
-| **Week 05** | Docker 容器化与 ROS2 桌面环境部署 | `Docker` `Dockerfile` `X11-Forwarding` | ✅ Done | [📝 查看笔记](week5/README.md) |
-| **Week 06** | 传感器数据处理与 KITTI 数据集实验 | `KITTI Dataset` `LiDAR` `RViz2` | ✅ Done | [📝 查看笔记](week6/README.md) |
-| **Week 07** | Docker 容器环境与 ROS2 桌面 VNC | `Docker` `VNC` `ROS2 Desktop` | ✅ Done | [📝 查看笔记](week7/README.md) |
-| **Week 08** | ROS2 中级实践与工具链 | `Launch` `RViz2` `ROS2 Bag` | ✅ Done | [📝 查看笔记](week8/README.md) |
-| **Week 09** | 机器人仿真环境与实践 | `Gazebo` `Webots` `URDF` | ✅ Done | [📝 查看笔记](week9/README.md) |
-| **Week 10** | Docker 卷挂载与 OpenCV 图像处理 | `Docker Volume` `OpenCV` `Python` | ✅ Done | [📝 查看笔记](week10/README.md) |
-| **Week 11** | Docker 镜像持久化与 Git 仓库整理 | `Docker Commit` `GitHub Pages` | ✅ Done | [📝 查看笔记](week11/README.md) |
-| **Week 12** | 四足机器人步态规划与高级仿真 ⭐ | `Webots/Gazebo` `Quadruped` `Gait` | ⏳ Optimizing | [📝 查看笔记](week12/README.md) |
-| **Week 13** | 四足机器人仿真与强化学习 | `PyBullet` `PPO` `RL` | ✅ Done | [📝 查看笔记](week13/README.md) |
-| **Week 14** | 综合项目实战 | `待补充` | ⏳ Optimizing | |
-| **Week 15** | 期末总结与展示 | `待补充` | ⏳ Optimizing | |
+| **Week 02** | 基础环境搭建与工程工具 | `WSL2` `Ubuntu` `Git` `Markdown` | ✅ Done | [📝 查看笔记](week1/README.md) |
+| **Week 03** | ROS2 环境配置与基础 CLI | `ROS2 Humble` `CLI` `Colcon` | ✅ Done | [📝 查看笔记](week2/README.md) |
+| **Week 04** | 机器人运动学核心概念 | `Kinematics` `TF2` `URDF` | ✅ Done | [📝 查看笔记](week3/README.md) |
+| **Week 05** | 机器视觉与 OpenCV 基础实验 | `OpenCV` `Python` `Image Processing` | ✅ Done | [📝 查看笔记](week4/README.md) |
+| **Week 06** | Docker 容器化与 ROS2 桌面环境部署 | `Docker` `Dockerfile` `X11-Forwarding` | ✅ Done | [📝 查看笔记](week5/README.md) |
+| **Week 07** | 传感器数据处理与 KITTI 数据集实验 | `KITTI Dataset` `LiDAR` `RViz2` | ✅ Done | [📝 查看笔记](week6/README.md) |
+| **Week 08** | Docker 容器环境与 ROS2 桌面 VNC | `Docker` `VNC` `ROS2 Desktop` | ✅ Done | [📝 查看笔记](week7/README.md) |
+| **Week 09** | ROS2 中级实践与工具链 | `Launch` `RViz2` `ROS2 Bag` | ✅ Done | [📝 查看笔记](week8/README.md) |
+| **Week 10** | 机器人仿真环境与实践 | `Gazebo` `Webots` `URDF` | ✅ Done | [📝 查看笔记](week9/README.md) |
+| **Week 11** | Docker 卷挂载与 OpenCV 图像处理 | `Docker Volume` `OpenCV` `Python` | ✅ Done | [📝 查看笔记](week10/README.md) |
+| **Week 12** | Docker 镜像持久化与 Git 仓库整理 | `Docker Commit` `GitHub Pages` | ✅ Done | [📝 查看笔记](week11/README.md) |
+| **Week 13** | 四足机器人步态规划与高级仿真 ⭐ | `Webots/Gazebo` `Quadruped` `Gait` | ⏳ Optimizing | [📝 查看笔记](week12/README.md) |
+| **Week 14** | 四足机器人仿真与强化学习 | `PyBullet` `PPO` `RL` | ✅ Done | [📝 查看笔记](week13/README.md) |
 
 ---
 
