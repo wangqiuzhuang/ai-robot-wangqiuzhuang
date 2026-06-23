@@ -100,12 +100,13 @@ ai-robot-wangqiuzhuang/
 │   ├── ai_chat_log.md             # AI 调试对话日志
 │   └── reflection.md              # 学习反思
 └── week14/
-    ├── README.md                   #   项目文档
-    ├── turtlesim_web_bridge.py     #   核心桥接程序 (ROS2 + WebSocket)
-    ├── maze.py                     #   迷宫生成模块
-    ├── explorer.py                 #   A*/BFS 自动寻路
-    ├── index.html                  #   手机遥控网页
-    └── requirements.txt            #   依赖清单
+    ├── README.md                       #   项目文档
+    └── turtlesim_remote/               #   项目代码
+        ├── turtlesim_web_bridge.py     #   核心桥接程序
+        ├── maze.py                     #   迷宫生成模块
+        ├── explorer.py                 #   A*/BFS 自动寻路
+        ├── index.html                  #   手机遥控网页
+        └── requirements.txt            #   依赖清单
 ```
 
 ---

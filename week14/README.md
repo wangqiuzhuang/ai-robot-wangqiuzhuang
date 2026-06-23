@@ -22,13 +22,16 @@ turtlesim_web_bridge.py (单一常驻程序)
 
 ## 文件结构
 
-| 文件 | 说明 |
-|:---|:---|
-| `turtlesim_web_bridge.py` | 核心桥接程序：WebSocket + ROS2 节点 + 碰撞检测 + 自动模式 |
-| `maze.py` | 迷宫生成模块：5×5 网格 + 递归回溯 + 编织环路 |
-| `explorer.py` | A* + BFS 双重寻路算法 + 性能对比 |
-| `index.html` | 手机遥控网页：方向键 + 自动/手动切换 + Canvas 路径可视化 |
-| `requirements.txt` | Python 依赖 (aiohttp) |
+```
+week14/
+├── README.md                        # 本文件
+└── turtlesim_remote/                # 项目代码
+    ├── turtlesim_web_bridge.py      # 核心桥接程序
+    ├── maze.py                      # 迷宫生成模块
+    ├── explorer.py                  # A* + BFS 寻路算法
+    ├── index.html                   # 手机遥控网页
+    └── requirements.txt             # Python 依赖
+```
 
 ## 功能特性
 
@@ -56,7 +59,7 @@ ros2 run turtlesim turtlesim_node
 
 # 3. 终端2: 启动桥接程序
 source /opt/ros/humble/setup.bash
-cd week14
+cd week14/turtlesim_remote
 python3 turtlesim_web_bridge.py
 
 # 4. 手机浏览器访问 (同一 Tailscale 网络)
@@ -66,6 +69,8 @@ python3 turtlesim_web_bridge.py
 ## 算法验证
 
 ```bash
+cd week14/turtlesim_remote
+
 # 验证迷宫可解性
 python3 maze.py
 
