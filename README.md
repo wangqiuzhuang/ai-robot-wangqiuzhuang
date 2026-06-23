@@ -40,6 +40,9 @@
 | **Week 13** | 四足机器人仿真与强化学习 | `PyBullet` `PPO` `RL` | ✅ Done | [📝 查看笔记](week13/README.md) |
 | **Week 14** | 手机遥控迷宫机器人 🤖 | `WebSocket` `BFS/A*` `Tornado` | ✅ Done | [📝 查看笔记](week14/README.md) |
 | **Week 15** | 期末总结与展示 | `待补充` | ⏳ Optimizing | |
+
+---
+
 ## 🛠️ 核心技术栈与工程能力看板
 
 ### 操作系统与容器
