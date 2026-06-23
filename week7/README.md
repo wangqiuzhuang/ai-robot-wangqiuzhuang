@@ -147,3 +147,26 @@ docker rmi <image-name>
 4. **生命周期管理**：掌握了 docker pull/run/ps/stop/start/rm 的基本运维命令
 
 Docker 容器化是 Week 10-12 高级实验的基础，后续将深入卷挂载、镜像提交和跨设备通信。
+
+## 代码说明
+
+**`docker_run.sh`** — Docker ROS2 VNC 一键启动脚本
+- 自动检查 Docker 安装状态和服务运行状态
+- 拉取 `ghcr.io/tiryoh/ros2-desktop-vnc:humble` 镜像
+- 清理旧容器 → 启动新容器 → 验证运行状态
+- 输出浏览器访问地址和常用 ROS2 命令提示
+
+**`vnc_connect.sh`** — VNC 连接辅助脚本
+- 验证容器运行状态
+- 输出浏览器访问地址和容器内文件位置
+- 列出常用 ROS2 命令参考
+
+## 运行方式
+
+```bash
+cd week7
+chmod +x docker_run.sh vnc_connect.sh
+./docker_run.sh            # 启动 ROS2 桌面容器
+./vnc_connect.sh           # 查看连接信息
+# 浏览器打开: http://127.0.0.1:6080
+```

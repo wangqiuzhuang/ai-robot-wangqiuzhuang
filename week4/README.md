@@ -178,3 +178,28 @@ def main():
 4. **Python-ROS2 交互**：用代码替代命令行实现了小乌龟的精确运动控制
 
 为后续 Docker 容器化和传感器数据处理提供了网络和仿真的基础能力。
+
+## 代码说明
+
+**`turtle_square.py`** — 小乌龟正方形轨迹控制器
+- 8 阶段状态机：4 边前进 + 4 次 90° 转弯
+- 边长 2m，线速度 1m/s，角速度 π/2 rad/s
+- 完成后自动停止
+
+**`laikago_demo.py`** — PyBullet Laikago 四足机器狗控制
+- 加载 Laikago URDF 模型到 PyBullet 仿真环境
+- 打印 12 个关节的详细信息 (名称/类型/范围)
+- 实现放倒 (零力矩) 和站立 (位置控制) 姿态切换
+
+## 运行方式
+
+```bash
+# 正方形轨迹
+ros2 run turtlesim turtlesim_node &
+cd week4
+python3 turtle_square.py
+
+# Laikago 仿真
+pip install pybullet
+python3 laikago_demo.py
+```

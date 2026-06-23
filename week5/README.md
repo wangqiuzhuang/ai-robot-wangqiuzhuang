@@ -147,3 +147,24 @@ for angle in np.linspace(0, 2*np.pi, 100):
 3. **轨迹规划**：在 Panda 机械臂上实现了笛卡尔空间的轨迹控制
 
 这些知识是后续四足机器人步态规划和仿真控制的理论基础。
+
+## 代码说明
+
+**`panda_circle.py`** — Panda 机械臂画圆演示
+- 在笛卡尔空间生成 100 个圆周轨迹点
+- 逐点调用 `calculateInverseKinematics` 求解关节角度
+- 使用 smoothstep 缓动函数实现关节空间平滑过渡
+- 实时计算末端跟踪误差
+
+**`panda_ik_demo.py`** — 正运动学/逆运动学对比演示
+- FK: 测试 4 种关节配置 (零位/前伸/上举/右偏)，观察末端位置
+- IK: 指定 4 个目标位置，求解并验证关节角度和跟踪精度
+
+## 运行方式
+
+```bash
+pip install pybullet numpy
+cd week5
+python3 panda_circle.py    # 画圆演示
+python3 panda_ik_demo.py   # FK/IK 对比
+```

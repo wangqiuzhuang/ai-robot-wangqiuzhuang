@@ -142,3 +142,31 @@ Vector3 angular:
 4. **消息机制**：理解了 Twist 消息结构如何控制小乌龟的运动
 
 这些基础为后续的机器人运动学、传感器数据处理和仿真实验提供了命令行的交互基础。
+
+## 代码说明
+
+本周补充了两个 Python 脚本用于 ROS2 通信实验：
+
+**`turtle_controller.py`** — 小乌龟速度控制器
+- 向 `/turtle1/cmd_vel` 话题发布 Twist 速度指令
+- 实现分阶段运动：前进 → 旋转 → 弧线 → 停止
+- 使用 `create_publisher` + `create_timer` 实现周期性控制
+
+**`turtle_pose_listener.py`** — 小乌龟位置监听器
+- 订阅 `/turtle1/pose` 话题，接收 Pose 消息
+- 实时打印位置坐标 (x, y)、朝向角 θ、线速度和角速度
+- 使用 `create_subscription` 注册回调函数
+
+## 运行方式
+
+```bash
+# 终端1: 启动小乌龟仿真器
+ros2 run turtlesim turtlesim_node
+
+# 终端2: 运行控制器 (小乌龟自动运动)
+cd week2
+python3 turtle_controller.py
+
+# 或终端2: 运行位置监听器 (观察小乌龟位置)
+python3 turtle_pose_listener.py
+```

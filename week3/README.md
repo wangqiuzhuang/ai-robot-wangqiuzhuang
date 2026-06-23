@@ -178,3 +178,28 @@ URDF（Unified Robot Description Format）是 XML 格式的机器人模型描述
 2. **VS Code 远程开发**：打通了 Windows IDE + WSL Linux 的混合开发环境
 3. **话题通信实战**：通过 pub/echo 完成了 ROS2 的核心通信机制验证
 4. **TF2 与 URDF 概念**：为后续多传感器融合和机器人建模仿真打下概念基础
+
+## 代码说明
+
+**`draw_circle.py`** — 小乌龟画圆控制器
+- 发布恒定线速度 (1.5 m/s) + 恒定角速度 (1.0 rad/s)
+- 利用圆周运动原理：v = ω × r，实现圆形轨迹
+- 理论半径 r = 1.5m，周期 T = 2π 秒
+
+**`turtle_spiral.py`** — 阿基米德螺旋线控制器
+- 线速度恒定，角速度逐渐减小 → 半径逐渐增大
+- 每 0.2 秒更新一次，step 越多螺旋越大
+
+## 运行方式
+
+```bash
+# 终端1: 启动小乌龟
+ros2 run turtlesim turtlesim_node
+
+# 终端2: 画圆
+cd week3
+python3 draw_circle.py
+
+# 或终端2: 画螺旋线
+python3 turtle_spiral.py
+```
