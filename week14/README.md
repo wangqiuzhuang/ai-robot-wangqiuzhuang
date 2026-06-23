@@ -130,4 +130,49 @@ python3 server.py
 
 本项目完整实现了 Week 14 的所有要求：手机 Web 遥控界面、迷宫模块、自动寻路算法、前后端实时通信。系统架构清晰、代码注释完整、算法实现规范，可作为后续机器人远程控制项目的参考框架。
 
-**附录**：详细报告见 `week14_王秋壮.pdf`
+## 代码说明
+
+**`server.py`** — Tornado WebSocket 桥接服务器 (核心)
+- WebSocket 双向通信：接收手机指令 → 分发到 maze/explorer
+- 支持手动控制 (move)、自动 BFS/A* 寻路、自动探索模式
+- 逐步动画展示寻路路径，广播状态到所有客户端
+
+**`maze.py`** — 迷宫生成模块
+- 递归回溯算法生成完美迷宫 (全连通、唯一解)
+- Cell 数据结构维护 N/S/E/W 四面墙壁
+- `to_dict()` 序列化接口供前端 Canvas 渲染
+- `to_ascii()` 终端可视化调试
+
+**`explorer.py`** — 寻路算法模块
+- BFS：广度优先搜索，保证最短路径，时间复杂度 O(V+E)
+- A*：曼哈顿距离启发式，通常更快收敛
+- Explorer 类：自动探索器 + 兴趣点记录 (十字路口)
+- `benchmark()` 性能对比
+
+**`index.html`** — 手机端触摸遥控界面
+- Canvas 实时渲染迷宫 (墙壁/路径/机器人/终点)
+- D-Pad 方向键 + 自动寻路按钮
+- 移动端优先：触摸事件、视口适配、防双击缩放
+
+**`week14_report.md`** — 项目报告
+- 覆盖链路 (30分)、迷宫 (25分)、进阶 (25分)、规范 (10分)、报告 (10分)
+
+## 运行方式
+
+```bash
+pip install tornado
+cd week14
+
+# 启动服务器
+python3 server.py
+
+# 手机浏览器访问 (确保在同一网络)
+# http://<电脑IP>:5000
+
+# 验证
+python -m py_compile maze.py explorer.py server.py
+python3 maze.py    # 终端输出 ASCII 迷宫
+python3 explorer.py  # BFS vs A* 性能对比
+```
+
+**附录**：详细报告见 `week14_report.md`
