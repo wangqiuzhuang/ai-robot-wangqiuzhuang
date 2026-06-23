@@ -2,177 +2,107 @@
 
 > 🏆 **期末小组项目** — 方向 B (turtlesim 迷宫探索变体)
 
-## 项目概览
+## 本周概览
 
-本项目实现了一个完整的**手机遥控迷宫机器人系统**，打通了「手机浏览器 → WebSocket → Python 后端 → 迷宫生成 → 自动寻路」的完整链路。
+本项目实现了一个完整的手机遥控迷宫机器人系统，打通了「手机浏览器 → WebSocket → Python 后端 → 迷宫生成 → 自动寻路」的完整链路。
 
-## 团队成员
+## 文件结构
 
-- **王秋壮 (Wang Qiuzhuang)** — 全栈开发
-  - 后端 server.py (Tornado WebSocket 服务器)
-  - 前端 index.html (手机触摸遥控界面)
-  - 迷宫算法 (maze.py + explorer.py)
-  - 算法对比与性能分析
+```
+week14/
+├── README.md                # 本文件
+├── img/                     # 截图与演示素材
+└── maze_app/                # 项目代码
+    ├── index.html           # 手机遥控网页 (Canvas + D-Pad)
+    ├── server.py            # Tornado WebSocket 桥接服务器
+    ├── maze.py              # 递归回溯迷宫生成
+    ├── explorer.py          # BFS / A* 自动寻路
+    └── week14_report.md     # 项目报告
+```
 
 ## 技术架构
 
-```
-┌─────────────────────────────────────────────────┐
-│                  📱 手机浏览器                      │
-│  index.html: Canvas 迷宫渲染 + 触摸方向键          │
-│  WebSocket 双向实时通信                            │
-└──────────────────────┬──────────────────────────┘
-                       │ WebSocket (JSON)
-┌──────────────────────▼──────────────────────────┐
-│            🖥️ server.py (Tornado)                 │
-│  • 接收手机指令并分发                               │
-│  • 维护全局状态 (机器人位置、迷宫数据)               │
-│  • 广播状态更新到所有连接的客户端                     │
-└──────┬──────────────────────┬──────────────────┘
-       │                      │
-┌──────▼──────┐    ┌──────────▼──────────┐
-│  maze.py    │    │   explorer.py        │
-│  迷宫生成    │    │   BFS + A* 寻路      │
-│  递归回溯    │    │   自动探索器          │
-└─────────────┘    └─────────────────────┘
-```
-
-## 核心文件
-
-| 文件 | 功能 | 行数 |
+| 层级 | 技术 | 说明 |
 |:---|:---|:---|
-| `server.py` | Tornado WebSocket 服务器，双向通信桥梁 | ~200 |
-| `maze.py` | 递归回溯迷宫生成，序列化与查询接口 | ~200 |
-| `explorer.py` | BFS / A* 寻路算法，自动探索器，性能对比 | ~200 |
-| `index.html` | 手机端触摸遥控界面，Canvas 迷宫渲染 | ~250 |
+| 📱 前端 | HTML5 Canvas + WebSocket | 手机浏览器触摸遥控，迷宫实时渲染 |
+| 🌐 通信 | Tornado WebSocket | JSON 双向实时通信，多客户端并发 |
+| 🧩 算法 | BFS + A* | 最短路径搜索与自动探索 |
+| 🗺️ 迷宫 | 递归回溯算法 | 完美迷宫生成（全连通、唯一解）|
 
 ## 功能特性
 
-### 1. 手机遥控 (index.html)
-- 🕹️ **D-Pad 方向键**：触摸控制机器人上下左右移动
-- 🎨 **实时 Canvas 渲染**：迷宫墙壁、已探索路径、机器人位置
-- 📊 **状态面板**：实时显示位置坐标、步数、迷宫尺寸
-- 🔔 **Toast 通知**：操作反馈（撞墙提示、到达终点等）
-- 📱 **移动端优化**：防止双击缩放、触摸事件处理
+### 手机遥控 (index.html)
+- 🕹️ D-Pad 方向键：触摸控制上下左右移动
+- 🎨 Canvas 实时渲染：迷宫墙壁、路径、机器人位置
+- 📊 状态面板：坐标、步数、探索进度
+- 📱 移动端优化：防双击缩放、触摸事件处理
 
-### 2. 迷宫生成 (maze.py)
-- 🏗️ **递归回溯算法**：保证生成完美迷宫（全连通、唯一解）
-- 📐 **可配置尺寸**：默认 10×10，支持任意 N×M
-- 🔌 **序列化接口**：`to_dict()` 输出 JSON 给前端渲染
-- 🐍 **ASCII 可视化**：`to_ascii()` 终端调试输出
+### 迷宫生成 (maze.py)
+- 递归回溯算法保证完美迷宫
+- Cell 数据结构维护 N/S/E/W 四面墙壁
+- `to_dict()` 序列化接口供前端渲染
+- `to_ascii()` 终端调试输出
 
-### 3. 寻路算法 (explorer.py)
-- 🔵 **BFS (广度优先搜索)**：保证最短路径，时间复杂度 O(V+E)
-- 🟣 **A\* (A-Star)**：曼哈顿距离启发式，通常更快到达目标
-- 🔍 **自动探索器**：增量探索 + 兴趣点记录（十字路口检测）
-- 📊 **性能基准测试**：`benchmark()` 对比两种算法
+### 寻路算法 (explorer.py)
+- BFS 广度优先搜索 — 保证最短路径 O(V+E)
+- A* 启发式搜索 — 曼哈顿距离启发函数
+- 自动探索器 — 增量探索 + 兴趣点记录
+- `benchmark()` BFS vs A* 性能对比
 
-### 4. 后端服务 (server.py)
-- 🌐 **Tornado 异步框架**：支持多客户端并发连接
-- 📡 **WebSocket 实时推送**：路径动画、状态同步
-- 🎬 **动画寻路展示**：逐步展示 BFS/A* 找到的路径
-- 🧭 **自动探索模式**：一键启动自动探索直到终点
+### 后端服务 (server.py)
+- Tornado 异步框架，多客户端并发
+- WebSocket 实时推送路径动画
+- 支持手动/自动 BFS/自动 A*/自动探索四种模式
+
+## 运行方式
+
+```bash
+pip install tornado
+cd week14/maze_app
+
+# 启动服务器
+python3 server.py
+
+# 手机浏览器访问 (确保同一网络)
+# http://<电脑IP>:5000
+
+# 本地测试
+# http://localhost:5000
+
+# 验证模块
+python3 maze.py          # 终端输出 ASCII 迷宫
+python3 explorer.py      # BFS vs A* 性能对比
+```
 
 ## 算法对比
 
 | 指标 | BFS | A* |
 |:---|:---|:---|
 | 时间复杂度 | O(V+E) | O(E) 最坏 |
-| 空间复杂度 | O(V) | O(V) |
-| 是否最优 | ✅ 保证最短路径 | ✅ (启发式可纳) |
+| 是否最优 | ✅ 最短路径 | ✅ 可纳启发式 |
 | 实际速度 | 中等 | 通常更快 |
-| 适用场景 | 无权图最短路径 | 带启发式的大规模搜索 |
-
-## 运行方式
-
-```bash
-# 1. 安装依赖
-pip install tornado
-
-# 2. 启动服务器
-cd week14
-python3 server.py
-
-# 3. 手机浏览器访问
-# http://<你的电脑IP>:5000
-
-# 4. 或本地测试
-# http://localhost:5000
-```
+| 适用场景 | 无权图 | 带启发式搜索 |
 
 ## 演示截图
 
 ![迷宫遥控器界面](img/maze_remote_ui.png)
 ![BFS寻路结果](img/bfs_path_result.png)
-![AStar寻路结果](img/astar_path_result.png)
 
-## 项目亮点
-
-1. **完整的前后端分离架构**：HTML5 Canvas + WebSocket + Python Tornado
-2. **两种经典寻路算法实现**：BFS 和 A* 的完整对比
-3. **移动端优先设计**：触摸事件、视口适配、防误触
-4. **实时双向通信**：手机操作 → 服务器响应 → Canvas 即时更新
-5. **可扩展性强**：迷宫模块可替换为 PyBullet 物理仿真环境
+---
 
 ## 踩坑记录
 
 | 问题 | 原因 | 解决方案 |
 |:---|:---|:---|
-| 手机浏览器无法访问服务器 | 手机和电脑不在同一局域网 | 确保连接同一 WiFi，或使用 Tailscale 组网 |
-| WebSocket 连接被防火墙拦截 | 5000 端口未开放 | `sudo ufw allow 5000` |
-| Canvas 在手机上显示模糊 | 未设置 devicePixelRatio | 使用 CSS 固定尺寸 + JS 动态计算 cellSize |
-| 触摸事件触发两次 | click 和 touchstart 同时触发 | 使用 `event.preventDefault()` 在 touchstart |
-| Tornado 端口占用 | 上次进程未正常退出 | `lsof -ti:5000 | xargs kill -9` |
+| 手机无法访问服务器 | 不在同一局域网 | 同一 WiFi 或 Tailscale 组网 |
+| WebSocket 连接被拒 | 5000 端口未开放 | `sudo ufw allow 5000` |
+| Canvas 手机显示模糊 | 未适配 devicePixelRatio | JS 动态计算 cellSize |
+| 触摸事件触发两次 | click + touchstart | `event.preventDefault()` |
 
 ---
 
 ## 总结
 
-本项目完整实现了 Week 14 的所有要求：手机 Web 遥控界面、迷宫模块、自动寻路算法、前后端实时通信。系统架构清晰、代码注释完整、算法实现规范，可作为后续机器人远程控制项目的参考框架。
+本项目完整实现了 Week 14 的所有要求：手机 Web 遥控界面、迷宫模块、自动寻路算法、前后端实时通信。系统架构清晰、代码注释完整、算法实现规范。
 
-## 代码说明
-
-**`server.py`** — Tornado WebSocket 桥接服务器 (核心)
-- WebSocket 双向通信：接收手机指令 → 分发到 maze/explorer
-- 支持手动控制 (move)、自动 BFS/A* 寻路、自动探索模式
-- 逐步动画展示寻路路径，广播状态到所有客户端
-
-**`maze.py`** — 迷宫生成模块
-- 递归回溯算法生成完美迷宫 (全连通、唯一解)
-- Cell 数据结构维护 N/S/E/W 四面墙壁
-- `to_dict()` 序列化接口供前端 Canvas 渲染
-- `to_ascii()` 终端可视化调试
-
-**`explorer.py`** — 寻路算法模块
-- BFS：广度优先搜索，保证最短路径，时间复杂度 O(V+E)
-- A*：曼哈顿距离启发式，通常更快收敛
-- Explorer 类：自动探索器 + 兴趣点记录 (十字路口)
-- `benchmark()` 性能对比
-
-**`index.html`** — 手机端触摸遥控界面
-- Canvas 实时渲染迷宫 (墙壁/路径/机器人/终点)
-- D-Pad 方向键 + 自动寻路按钮
-- 移动端优先：触摸事件、视口适配、防双击缩放
-
-**`week14_report.md`** — 项目报告
-- 覆盖链路 (30分)、迷宫 (25分)、进阶 (25分)、规范 (10分)、报告 (10分)
-
-## 运行方式
-
-```bash
-pip install tornado
-cd week14
-
-# 启动服务器
-python3 server.py
-
-# 手机浏览器访问 (确保在同一网络)
-# http://<电脑IP>:5000
-
-# 验证
-python -m py_compile maze.py explorer.py server.py
-python3 maze.py    # 终端输出 ASCII 迷宫
-python3 explorer.py  # BFS vs A* 性能对比
-```
-
-**附录**：详细报告见 `week14_report.md`
+项目代码位于 `maze_app/` 子目录，详细报告见 `maze_app/week14_report.md`。

@@ -100,12 +100,14 @@ ai-robot-wangqiuzhuang/
 │   ├── ai_chat_log.md             # AI 调试对话日志
 │   └── reflection.md              # 学习反思
 └── week14/
-    ├── README.md
-    ├── server.py           #   WebSocket 桥接服务器
-    ├── maze.py             #   迷宫生成模块
-    ├── explorer.py         #   BFS/A* 寻路算法
-    ├── index.html          #   手机遥控界面
-    └── week14_report.md    #   项目报告
+    ├── README.md           #   项目文档
+    ├── img/                #   截图素材
+    └── maze_app/           #   项目代码
+        ├── index.html      #   手机遥控界面
+        ├── server.py       #   WebSocket 服务器
+        ├── maze.py         #   迷宫生成模块
+        ├── explorer.py     #   BFS/A* 寻路算法
+        └── week14_report.md
 ```
 
 ---
