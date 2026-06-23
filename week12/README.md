@@ -121,3 +121,33 @@ OpenCV 显示窗口
 ## 总结
 
 本周是课程中的 **冲A+核心实验**，成功搭建了跨设备的实时摄像头流传输链路，打通了「手机摄像头 → Tailscale 组网 → WSL Python/OpenCV → ArUco 识别」的完整数据管道。这一架构可扩展至远程机器人视觉、移动端 AI 推理等实际应用场景。
+
+## 代码说明
+
+**`aruco_detect.py`** — ArUco 标记实时检测器
+- 支持 4×4 / 5×5 / 6×6 / 7×7 四种 ArUco 字典
+- 实时摄像头检测模式：逐帧检测标记并绘制边框和 ID
+- 单图检测模式：检测图片中的标记并保存标注结果
+- 按 's' 截图保存，按 'q' 退出
+
+**`camera_server.py`** — 手机摄像头 WebSocket 服务器
+- Flask + SocketIO 实现手机浏览器到 WSL 的图像流传输
+- HTML5 getUserMedia 调用手机摄像头
+- Base64 JPEG 编码传输，服务器端 OpenCV 解码
+- 预留 ArUco 检测接口
+
+## 运行方式
+
+```bash
+pip install opencv-contrib-python flask flask-socketio
+cd week12
+
+# ArUco 实时检测 (需要摄像头)
+python3 aruco_detect.py
+
+# 或检测单张图片
+python3 aruco_detect.py --image test.jpg
+
+# 手机摄像头服务器 (手机浏览器访问 http://<wsl-ip>:5000)
+python3 camera_server.py
+```

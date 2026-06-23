@@ -177,3 +177,45 @@ ros2 interface show my_package/msg/MySensor
 4. **自定义接口**：扩展 ROS2 消息体系以满足项目特定需求
 
 这些工具链构成了实际机器人项目开发的标准工程环境。
+
+## 代码说明
+
+**`turtlesim_launch.py`** — ROS2 Launch 文件
+- 一键启动 turtlesim 仿真器 + 键盘遥控
+- 声明启动参数 (turtle_name, use_keyboard) 支持条件启动
+- 展示 Node 配置的完整语法 (parameters, remappings, prefix)
+
+**`my_robot.urdf`** — 差分驱动机器人 URDF 模型
+- 6 个 link: base_footprint, base_link, left_wheel, right_wheel, front_caster, lidar_frame
+- 定义可视化几何体、碰撞检测、惯性参数
+- 差分驱动轮 (continuous joint) + 前万向轮支撑
+
+**`record_bag.sh`** — ROS2 Bag 录制/回放脚本
+- 支持 record / play / play2x / info 四个子命令
+- 默认录制 `/turtle1/pose` 和 `/turtle1/cmd_vel` 话题
+
+**`MySensor.msg`** — 自定义 ROS2 消息接口
+- 包含 sensor_id, sensor_name, readings[], is_calibrated 字段
+- 遵循 rosidl 接口生成规范
+
+## 运行方式
+
+```bash
+cd week8
+
+# Launch 文件
+ros2 launch turtlesim_launch.py
+
+# URDF 可视化
+ros2 launch urdf_tutorial display.launch.py model:=./my_robot.urdf
+
+# Bag 录制
+chmod +x record_bag.sh
+./record_bag.sh record     # 录制
+./record_bag.sh play       # 回放
+./record_bag.sh info       # 查看信息
+
+# 自定义消息 (需放在 ROS2 包中)
+# 在 CMakeLists.txt 和 package.xml 中配置 rosidl_generate_interfaces
+colcon build --packages-select my_package
+```

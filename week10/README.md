@@ -49,3 +49,31 @@
 ## 总结
 
 本周掌握了 Docker 卷挂载的核心用法，实现了本地与容器间的双向文件同步；同时通过 OpenCV 教程代码的运行，完成了图像处理入门实验。版本兼容性问题的排查过程也加深了对 Python 依赖管理机制的理解。
+
+## 代码说明
+
+**`opencv_cat_demo.py`** — OpenCV 图像处理综合演示
+- 颜色空间转换：RGB → HSV → Gray
+- 边缘检测对比：Canny (双阈值) vs Sobel (梯度幅值)
+- 图像滤波对比：Gaussian Blur / Median Blur / Bilateral Filter
+- 结果网格拼接输出统计信息
+
+**`docker_mount.sh`** — Docker 卷挂载启动脚本
+- 一键启动带 `-v` 挂载的 ROS2 桌面容器
+- 显示挂载路径和验证双向同步的方法
+- 提醒容器变化需 docker commit 保存
+
+## 运行方式
+
+```bash
+pip install opencv-python numpy
+cd week10
+
+# OpenCV 实验
+python3 opencv_cat_demo.py [图片路径]
+
+# Docker 卷挂载
+chmod +x docker_mount.sh
+./docker_mount.sh
+# 浏览器打开: http://127.0.0.1:6081
+```
