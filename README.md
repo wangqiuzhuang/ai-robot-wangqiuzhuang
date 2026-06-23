@@ -38,7 +38,7 @@
 | **Week 11** | Docker 镜像持久化与 Git 仓库整理 | `Docker Commit` `GitHub Pages` | ✅ Done | [📝 查看笔记](week11/README.md) |
 | **Week 12** | 远程摄像头流与 ArUco 标记识别 ⭐ | `OpenCV` `ArUco` `Tailscale` | ✅ Done | [📝 查看笔记](week12/README.md) |
 | **Week 13** | 四足机器人仿真与强化学习 | `PyBullet` `PPO` `RL` | ✅ Done | [📝 查看笔记](week13/README.md) |
-| **Week 14** | 手机遥控迷宫机器人 🤖 | `WebSocket` `BFS/A*` `Tornado` | ✅ Done | [📝 查看笔记](week14/README.md) |
+| **Week 14** | 手机遥控迷宫机器人 🤖 | `ROS2` `aiohttp` `A*` `Tailscale` | ✅ Done | [📝 查看笔记](week14/README.md) |
 | **Week 15** | 期末总结与展示 | `待补充` | ⏳ Optimizing | |
 
 ---
@@ -100,14 +100,12 @@ ai-robot-wangqiuzhuang/
 │   ├── ai_chat_log.md             # AI 调试对话日志
 │   └── reflection.md              # 学习反思
 └── week14/
-    ├── README.md           #   项目文档
-    ├── img/                #   截图素材
-    └── maze_app/           #   项目代码
-        ├── index.html      #   手机遥控界面
-        ├── server.py       #   WebSocket 服务器
-        ├── maze.py         #   迷宫生成模块
-        ├── explorer.py     #   BFS/A* 寻路算法
-        └── week14_report.md
+    ├── README.md                   #   项目文档
+    ├── turtlesim_web_bridge.py     #   核心桥接程序 (ROS2 + WebSocket)
+    ├── maze.py                     #   迷宫生成模块
+    ├── explorer.py                 #   A*/BFS 自动寻路
+    ├── index.html                  #   手机遥控网页
+    └── requirements.txt            #   依赖清单
 ```
 
 ---

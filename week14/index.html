@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>turtlesim 遥控器</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+    .panel {
+      width: min(420px, 100%);
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+    }
+    .subtitle {
+      color: #94a3b8;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .status {
+      margin: 10px 0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #020617;
+      font-size: 13px;
+    }
+    .status.connected { color: #86efac; }
+    .status.disconnected { color: #fca5a5; }
+    .pad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 14px 0;
+    }
+    button {
+      min-height: 68px;
+      border: none;
+      border-radius: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      background: #0ea5e9;
+      color: white;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+    button:active { opacity: 0.7; }
+    button.danger { background: #dc2626; }
+    button.success { background: #16a34a; }
+    button.warn { background: #f59e0b; color: #000; }
+    .telemetry {
+      font-family: Consolas, monospace;
+      background: #020617;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .map-card {
+      margin-top: 14px;
+      background: #020617;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .map-card h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+    canvas {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      background: #e2e8f0;
+      display: block;
+    }
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .button-row button {
+      flex: 1;
+      min-height: 48px;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>🐢 turtlesim 手机遥控器</h1>
+    <p class="subtitle">手机和电脑进入同一 Tailscale 网络后，浏览器打开本页面。长按方向键持续控制，松开停止。</p>
+
+    <div id="status" class="status disconnected">未连接</div>
+
+    <div class="pad">
+      <div></div>
+      <button data-linear="2.0" data-angular="0.0">▲</button>
+      <div></div>
+      <button data-linear="0.0" data-angular="2.0">◀</button>
+      <button id="stop" class="danger">■</button>
+      <button data-linear="0.0" data-angular="-2.0">▶</button>
+      <div></div>
+      <button data-linear="-2.0" data-angular="0.0">▼</button>
+      <div></div>
+    </div>
+
+    <div class="button-row">
+      <button id="reset">🔄 重置</button>
+      <button id="auto" class="success">🤖 自动探索</button>
+    </div>
+
+    <div class="map-card">
+      <h2>🗺️ 二维迷宫预览</h2>
+      <canvas id="mazeCanvas" width="360" height="360"></canvas>
+    </div>
+
+    <div id="telemetry" class="telemetry">等待乌龟状态...</div>
+  </div>
+
+  <script>
+    const statusEl = document.getElementById("status");
+    const telemetryEl = document.getElementById("telemetry");
+    const mazeCanvas = document.getElementById("mazeCanvas");
+    const mazeCtx = mazeCanvas.getContext("2d");
+    const wsScheme = location.protocol === "https:" ? "wss" : "ws";
+    const socket = new WebSocket(`${wsScheme}://${location.host}/ws`);
+    let latestState = null;
+
+    socket.onopen = () => {
+      statusEl.textContent = "已连接";
+      statusEl.className = "status connected";
+    };
+
+    socket.onclose = () => {
+      statusEl.textContent = "连接断开";
+      statusEl.className = "status disconnected";
+    };
+
+    socket.onmessage = (event) => {
+      const payload = JSON.parse(event.data);
+      if (payload.type !== "state") return;
+      const state = payload.data;
+      latestState = state;
+      const a = state.auto || {};
+      telemetryEl.textContent =
+        `x: ${state.pose.x}  y: ${state.pose.y}  theta: ${state.pose.theta}\n` +
+        `cmd: lin=${state.command.linear} ang=${state.command.angular}\n` +
+        `applied: lin=${state.applied_command.linear} ang=${state.applied_command.angular}\n` +
+        `blocked: ${state.rule.blocked} (${state.rule.reason})\n` +
+        `goal reached: ${state.rule.goal_reached}\n` +
+        `auto: ${a.enabled ? '🤖 ON' : '🖐️ OFF'} | waypoint: ${a.waypoint_idx || 0}`;
+      document.getElementById("auto").textContent =
+        a.enabled ? '⏹️ 停止自动' : '🤖 自动探索';
+      document.getElementById("auto").className = a.enabled ? 'warn' : 'success';
+      drawMaze(state);
+    };
+
+    function sendCommand(linear, angular) {
+      if (socket.readyState !== WebSocket.OPEN) return;
+      socket.send(JSON.stringify({ type: "command", linear, angular }));
+    }
+
+    function stopTurtle() {
+      if (socket.readyState !== WebSocket.OPEN) return;
+      socket.send(JSON.stringify({ type: "stop" }));
+    }
+
+    function resetMaze() {
+      if (socket.readyState !== WebSocket.OPEN) return;
+      socket.send(JSON.stringify({ type: "reset" }));
+    }
+
+    function toggleAuto() {
+      if (socket.readyState !== WebSocket.OPEN) return;
+      const enabled = latestState && latestState.auto && latestState.auto.enabled;
+      if (enabled) {
+        socket.send(JSON.stringify({ type: "stop" }));
+      } else {
+        socket.send(JSON.stringify({ type: "auto" }));
+      }
+    }
+
+    function bindHold(button) {
+      const linear = Number(button.dataset.linear);
+      const angular = Number(button.dataset.angular);
+      const start = (event) => {
+        event.preventDefault();
+        sendCommand(linear, angular);
+      };
+      const stop = (event) => {
+        event.preventDefault();
+        stopTurtle();
+      };
+      button.addEventListener("mousedown", start);
+      button.addEventListener("mouseup", stop);
+      button.addEventListener("mouseleave", stop);
+      button.addEventListener("touchstart", start, { passive: false });
+      button.addEventListener("touchend", stop, { passive: false });
+      button.addEventListener("touchcancel", stop, { passive: false });
+    }
+
+    function worldToCanvasX(x, bounds) {
+      const margin = 20;
+      const w = mazeCanvas.width - margin * 2;
+      return margin + ((x - bounds.min_x) / (bounds.max_x - bounds.min_x)) * w;
+    }
+
+    function worldToCanvasY(y, bounds) {
+      const margin = 20;
+      const h = mazeCanvas.height - margin * 2;
+      return mazeCanvas.height - margin - ((y - bounds.min_y) / (bounds.max_y - bounds.min_y)) * h;
+    }
+
+    function drawMaze(state) {
+      const bounds = state.maze.bounds;
+      mazeCtx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
+
+      // 背景
+      mazeCtx.fillStyle = "#f8fafc";
+      mazeCtx.fillRect(0, 0, mazeCanvas.width, mazeCanvas.height);
+
+      // 边界
+      const x0 = worldToCanvasX(bounds.min_x, bounds);
+      const x1 = worldToCanvasX(bounds.max_x, bounds);
+      const y0 = worldToCanvasY(bounds.max_y, bounds);
+      const y1 = worldToCanvasY(bounds.min_y, bounds);
+      mazeCtx.strokeStyle = "#0f172a";
+      mazeCtx.lineWidth = 3;
+      mazeCtx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+
+      // 障碍物
+      mazeCtx.fillStyle = "#475569";
+      state.maze.obstacles.forEach((obstacle) => {
+        const ox = worldToCanvasX(obstacle.x, bounds);
+        const oy = worldToCanvasY(obstacle.y + obstacle.h, bounds);
+        const ow = worldToCanvasX(obstacle.x + obstacle.w, bounds) - ox;
+        const oh = worldToCanvasY(obstacle.y, bounds) - oy;
+        mazeCtx.fillRect(ox, oy, ow, oh);
+      });
+
+      // ── 自动路径 waypoints ──
+      if (latestState && latestState.auto && latestState.auto.waypoints) {
+        const wps = latestState.auto.waypoints;
+        mazeCtx.strokeStyle = "#f59e0b";
+        mazeCtx.lineWidth = 2;
+        mazeCtx.setLineDash([5, 5]);
+        mazeCtx.beginPath();
+        for (let i = 0; i < wps.length; i++) {
+          const wx = worldToCanvasX(wps[i][0], bounds);
+          const wy = worldToCanvasY(wps[i][1], bounds);
+          if (i === 0) mazeCtx.moveTo(wx, wy);
+          else mazeCtx.lineTo(wx, wy);
+        }
+        mazeCtx.stroke();
+        mazeCtx.setLineDash([]);
+
+        // 路标点
+        wps.forEach((wp, i) => {
+          const wx = worldToCanvasX(wp[0], bounds);
+          const wy = worldToCanvasY(wp[1], bounds);
+          mazeCtx.fillStyle = "#f59e0b";
+          mazeCtx.beginPath();
+          mazeCtx.arc(wx, wy, 3, 0, Math.PI * 2);
+          mazeCtx.fill();
+        });
+      }
+
+      // 起点
+      const sx = worldToCanvasX(state.maze.start.x, bounds);
+      const sy = worldToCanvasY(state.maze.start.y, bounds);
+      mazeCtx.fillStyle = "#16a34a";
+      mazeCtx.beginPath();
+      mazeCtx.arc(sx, sy, 8, 0, Math.PI * 2);
+      mazeCtx.fill();
+
+      // 终点
+      const gx = worldToCanvasX(state.maze.goal.x, bounds);
+      const gy = worldToCanvasY(state.maze.goal.y, bounds);
+      mazeCtx.fillStyle = "#f59e0b";
+      mazeCtx.beginPath();
+      mazeCtx.arc(gx, gy, state.maze.goal.radius * 20, 0, Math.PI * 2);
+      mazeCtx.fill();
+
+      // 小乌龟
+      const tx = worldToCanvasX(state.pose.x, bounds);
+      const ty = worldToCanvasY(state.pose.y, bounds);
+      mazeCtx.fillStyle = state.rule.blocked ? "#dc2626" : "#2563eb";
+      mazeCtx.beginPath();
+      mazeCtx.arc(tx, ty, state.maze.turtle_radius * 18, 0, Math.PI * 2);
+      mazeCtx.fill();
+
+      // 朝向箭头
+      mazeCtx.strokeStyle = "#0f172a";
+      mazeCtx.lineWidth = 3;
+      mazeCtx.setLineDash([]);
+      mazeCtx.beginPath();
+      mazeCtx.moveTo(tx, ty);
+      mazeCtx.lineTo(
+        tx + Math.cos(state.pose.theta) * 22,
+        ty - Math.sin(state.pose.theta) * 22
+      );
+      mazeCtx.stroke();
+    }
+
+    document.querySelectorAll("[data-linear]").forEach(bindHold);
+    document.getElementById("stop").addEventListener("click", stopTurtle);
+    document.getElementById("reset").addEventListener("click", resetMaze);
+    document.getElementById("auto").addEventListener("click", toggleAuto);
+  </script>
+</body>
+</html>
