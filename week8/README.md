@@ -156,6 +156,13 @@ ros2 interface show my_package/msg/MySensor
 
 ---
 
+## 作业截图
+
+![Docker容器运行截图](img/docker_run.png)
+![RViz2显示机器人模型](img/rviz2_robot.png)
+
+---
+
 ## 踩坑记录
 
 | 问题 | 原因 | 解决方案 |
