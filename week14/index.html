@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🤖 手机遥控迷宫机器人 — Week 14</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --panel: #16213e;
+    --accent: #e94560;
+    --accent2: #0f3460;
+    --text: #eee;
+    --green: #4ecca3;
+    --gold: #f0a500;
+    --wall: #2c3e50;
+    --path: #4ecca3;
+    --robot: #e94560;
+    --goal: #f0a500;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex; flex-direction: column;
+    min-height: 100dvh; overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none; -webkit-user-select: none;
+  }
+
+  /* Header */
+  header {
+    background: var(--panel);
+    padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 2px solid var(--accent);
+    position: sticky; top: 0; z-index: 100;
+  }
+  header h1 { font-size: 1.1rem; }
+  #status {
+    font-size: 0.75rem; padding: 4px 10px; border-radius: 12px;
+    background: var(--accent2);
+  }
+  #status.connected { background: var(--green); color: #000; }
+
+  /* Maze canvas */
+  #maze-container {
+    flex: 0 0 auto; padding: 8px;
+    display: flex; justify-content: center;
+  }
+  canvas {
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    background: #0a0a1a;
+  }
+
+  /* Info bar */
+  #info-bar {
+    display: flex; gap: 8px; padding: 4px 12px;
+    font-size: 0.7rem; color: #aaa;
+    justify-content: center; flex-wrap: wrap;
+  }
+  #info-bar span { background: var(--panel); padding: 2px 8px; border-radius: 8px; }
+
+  /* Controls */
+  #controls {
+    flex: 1; display: flex; flex-direction: column; gap: 8px;
+    padding: 8px 16px 16px;
+  }
+
+  /* Auto buttons */
+  #auto-btns {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  }
+  #auto-btns button {
+    flex: 1; min-width: 70px; padding: 10px 8px;
+    border: none; border-radius: 12px;
+    font-size: 0.78rem; font-weight: 600;
+    cursor: pointer; transition: transform 0.1s, opacity 0.2s;
+  }
+  #auto-btns button:active { transform: scale(0.95); }
+  .btn-bfs { background: #3498db; color: #fff; }
+  .btn-astar { background: #9b59b6; color: #fff; }
+  .btn-explore { background: var(--green); color: #000; }
+  .btn-generate { background: var(--gold); color: #000; }
+  .btn-stop { background: var(--accent); color: #fff; }
+
+  /* D-Pad */
+  #dpad {
+    display: grid;
+    grid-template-areas:
+      ". up ."
+      "left center right"
+      ". down .";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 6px;
+    max-width: 280px; margin: 0 auto;
+    aspect-ratio: 1;
+  }
+  #dpad button {
+    border: none; border-radius: 14px;
+    font-size: 1.4rem; cursor: pointer;
+    background: var(--accent2);
+    color: var(--text);
+    transition: background 0.1s; min-height: 60px;
+  }
+  #dpad button:active { background: var(--accent); }
+  #dpad .up { grid-area: up; }
+  #dpad .down { grid-area: down; }
+  #dpad .left { grid-area: left; }
+  #dpad .right { grid-area: right; }
+  #dpad .center {
+    grid-area: center; font-size: 0.8rem;
+    background: var(--accent);
+  }
+
+  /* Message log */
+  #log {
+    max-height: 80px; overflow-y: auto;
+    font-size: 0.7rem; color: #888;
+    text-align: center; padding: 0 8px;
+  }
+
+  /* Toast */
+  #toast {
+    position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+    background: var(--accent); color: #fff;
+    padding: 8px 20px; border-radius: 20px;
+    font-size: 0.85rem; z-index: 200;
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🤖 迷宫遥控器</h1>
+  <span id="status">🔌 连接中...</span>
+</header>
+
+<div id="maze-container">
+  <canvas id="maze-canvas"></canvas>
+</div>
+
+<div id="info-bar">
+  <span id="pos-label">📍 (0,0)</span>
+  <span id="steps-label">👣 0步</span>
+  <span id="cells-label">🔍 0格</span>
+</div>
+
+<div id="toast"></div>
+
+<div id="controls">
+  <div id="auto-btns">
+    <button class="btn-generate" onclick="sendCmd('generate_maze')">🏗️ 新迷宫</button>
+    <button class="btn-bfs" onclick="sendCmd('auto_bfs')">🔵 BFS</button>
+    <button class="btn-astar" onclick="sendCmd('auto_astar')">🟣 A*</button>
+    <button class="btn-explore" onclick="sendCmd('auto_explore')">🔍 探索</button>
+    <button class="btn-stop" onclick="sendCmd('stop')">⏹️ 停止</button>
+  </div>
+  <div id="dpad">
+    <button class="up" ontouchstart="move('up');event.preventDefault()" onmousedown="move('up')">▲</button>
+    <button class="left" ontouchstart="move('left');event.preventDefault()" onmousedown="move('left')">◀</button>
+    <button class="center" onclick="sendCmd('reset')">🏠</button>
+    <button class="right" ontouchstart="move('right');event.preventDefault()" onmousedown="move('right')">▶</button>
+    <button class="down" ontouchstart="move('down');event.preventDefault()" onmousedown="move('down')">▼</button>
+  </div>
+  <div id="log"></div>
+</div>
+
+<script>
+// ── WebSocket 连接 ─────────────────────────────
+const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+const ws = new WebSocket(`${protocol}//${location.host}/ws`);
+let mazeData = null;
+let robotPos = [0, 0];
+let robotPath = [];
+let steps = 0;
+
+ws.onopen = () => {
+  document.getElementById('status').textContent = '🟢 已连接';
+  document.getElementById('status').classList.add('connected');
+};
+
+ws.onclose = () => {
+  document.getElementById('status').textContent = '🔴 断开';
+  document.getElementById('status').classList.remove('connected');
+};
+
+ws.onmessage = (e) => {
+  const data = JSON.parse(e.data);
+  if (data.maze) mazeData = data.maze;
+  if (data.robot_position) {
+    robotPos = data.robot_position;
+    robotPath = data.robot_path || [];
+    steps = robotPath.length;
+  }
+  updateUI(data);
+  drawMaze();
+};
+
+// ── 发送指令 ───────────────────────────────────
+function sendCmd(cmd) {
+  ws.send(JSON.stringify({ command: cmd }));
+}
+
+function move(dir) {
+  ws.send(JSON.stringify({ command: 'move', direction: dir }));
+}
+
+// ── 更新UI ─────────────────────────────────────
+function updateUI(data) {
+  document.getElementById('pos-label').textContent = `📍 (${robotPos[0]},${robotPos[1]})`;
+  document.getElementById('steps-label').textContent = `👣 ${steps}步`;
+  if (data.maze) {
+    document.getElementById('cells-label').textContent =
+      `🔍 ${data.maze.width}x${data.maze.height}`;
+  }
+  if (data.message) {
+    document.getElementById('log').textContent = data.message;
+    showToast(data.message);
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+// ── Canvas 绘制迷宫 ────────────────────────────
+const canvas = document.getElementById('maze-canvas');
+const ctx = canvas.getContext('2d');
+
+function drawMaze() {
+  if (!mazeData) return;
+  const w = mazeData.width;
+  const h = mazeData.height;
+  const cellSize = Math.min(
+    Math.floor((window.innerWidth - 32) / w),
+    Math.floor((window.innerHeight * 0.35) / h),
+    36
+  );
+  canvas.width = w * cellSize + 2;
+  canvas.height = h * cellSize + 2;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 绘制格子
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const cell = mazeData.cells[y][x];
+      const cx = x * cellSize, cy = y * cellSize;
+
+      // 路径高亮
+      const inPath = robotPath.some(p => p[0] === x && p[1] === y);
+      if (inPath) {
+        ctx.fillStyle = 'rgba(78, 204, 163, 0.3)';
+        ctx.fillRect(cx + 2, cy + 2, cellSize - 4, cellSize - 4);
+      }
+
+      // 墙壁
+      ctx.strokeStyle = '#4a6fa5';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+
+      if (cell.walls.N) { ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + cellSize, cy); ctx.stroke(); }
+      if (cell.walls.S) { ctx.beginPath(); ctx.moveTo(cx, cy + cellSize); ctx.lineTo(cx + cellSize, cy + cellSize); ctx.stroke(); }
+      if (cell.walls.W) { ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, cy + cellSize); ctx.stroke(); }
+      if (cell.walls.E) { ctx.beginPath(); ctx.moveTo(cx + cellSize, cy); ctx.lineTo(cx + cellSize, cy + cellSize); ctx.stroke(); }
+    }
+  }
+
+  // 终点标记
+  const gx = (w - 1) * cellSize, gy = (h - 1) * cellSize;
+  ctx.fillStyle = '#f0a500';
+  ctx.font = `${cellSize * 0.7}px sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🏁', gx + cellSize / 2, gy + cellSize / 2);
+
+  // 机器人标记
+  const rx = robotPos[0] * cellSize, ry = robotPos[1] * cellSize;
+  ctx.fillStyle = '#e94560';
+  ctx.beginPath();
+  ctx.arc(rx + cellSize / 2, ry + cellSize / 2, cellSize * 0.35, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillText('🤖', rx + cellSize / 2, ry + cellSize / 2);
+}
+
+window.addEventListener('resize', drawMaze);
+
+// 初始请求状态
+setTimeout(() => sendCmd('generate_maze'), 500);
+
+// 防止双击缩放
+document.addEventListener('dblclick', e => e.preventDefault());
+</script>
+</body>
+</html>
