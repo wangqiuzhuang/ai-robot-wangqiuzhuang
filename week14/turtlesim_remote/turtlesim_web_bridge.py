@@ -6,7 +6,6 @@ Week 14: turtlesim 遥控迷宫 — WebSocket 桥接程序 (方向 B)
 - 接收手机网页的控制命令 (前进/后退/左转/右转/停止)
 - 发布 /turtle1/cmd_vel 驱动小乌龟
 - 内置迷宫边界 + 障碍物碰撞检测
-- 集成 explorer.py 实现 A*/BFS 自动探索模式
 
 运行方式:
   终端1: source /opt/ros/humble/setup.bash && ros2 run turtlesim turtlesim_node
@@ -28,7 +27,6 @@ from turtlesim.msg import Pose
 from turtlesim.srv import TeleportAbsolute
 
 from maze import build_maze
-from explorer import Planner
 
 HOST = "0.0.0.0"
 PORT = 8080
@@ -42,7 +40,7 @@ OBSTACLES = _MAZE["obstacles"]
 
 
 class TurtleWebBridge(Node):
-    """ROS2 节点 + WebSocket 桥接: 手动控制 + 自动探索"""
+    """ROS2 节点 + WebSocket 桥接: 手机手动遥控"""
 
     def __init__(self):
         super().__init__("turtlesim_web_bridge")
@@ -65,10 +63,6 @@ class TurtleWebBridge(Node):
         self.init_timer = self.create_timer(0.5, self.try_initialize_maze)
         self.maze_initialized = False
 
-        # ── 自动探索 ──
-        self.auto_mode = False
-        self.explorer = Planner()
-
     def on_pose(self, msg):
         self.current_pose = {
             "x": round(msg.x, 3),
@@ -83,12 +77,10 @@ class TurtleWebBridge(Node):
             self.applied_angular = 0.0
             self.blocked = False
             self.block_reason = "goal_reached"
-            self.auto_mode = False
 
     def set_command(self, linear, angular):
-        if not self.auto_mode:
-            self.current_linear = float(linear)
-            self.current_angular = float(angular)
+        self.current_linear = float(linear)
+        self.current_angular = float(angular)
 
     def stop(self):
         self.set_command(0.0, 0.0)
@@ -118,8 +110,6 @@ class TurtleWebBridge(Node):
         self.blocked = False
         self.block_reason = "reset_to_start"
         self.goal_reached = False
-        self.auto_mode = False
-        self.explorer = Planner()
 
     def is_inside_goal(self, x, y):
         dx = x - GOAL_REGION["x"]
@@ -175,13 +165,6 @@ class TurtleWebBridge(Node):
         return safe_linear, self.current_angular
 
     def publish_command(self):
-        # ── 自动模式：由 explorer 决定速度 ──
-        if self.auto_mode and not self.goal_reached:
-            state = self.get_state()
-            auto_lin, auto_ang = self.explorer.decide(state)
-            self.current_linear = auto_lin
-            self.current_angular = auto_ang
-
         safe_linear, safe_angular = self.compute_safe_motion()
         msg = Twist()
         msg.linear.x = safe_linear
@@ -191,9 +174,6 @@ class TurtleWebBridge(Node):
         self.publisher.publish(msg)
 
     def get_state(self):
-        waypoints = None
-        if self.explorer and self.explorer.waypoints:
-            waypoints = [list(w) for w in self.explorer.waypoints]
         return {
             "pose": dict(self.current_pose),
             "command": {
@@ -215,11 +195,6 @@ class TurtleWebBridge(Node):
                 "goal": dict(GOAL_REGION),
                 "obstacles": list(OBSTACLES),
                 "turtle_radius": TURTLE_RADIUS,
-            },
-            "auto": {
-                "enabled": self.auto_mode,
-                "waypoints": waypoints,
-                "waypoint_idx": self.explorer.idx if self.explorer else 0,
             },
         }
 
@@ -252,16 +227,11 @@ async def websocket_handler(request):
             msg_type = data.get("type")
 
             if msg_type == "command":
-                bridge.auto_mode = False
                 bridge.set_command(data.get("linear", 0.0), data.get("angular", 0.0))
             elif msg_type == "stop":
-                bridge.auto_mode = False
                 bridge.stop()
             elif msg_type == "reset":
                 bridge.reset_to_start()
-            elif msg_type == "auto":
-                bridge.auto_mode = True
-                bridge.explorer = Planner()
 
             await ws.send_json({"type": "state", "data": bridge.get_state()})
     finally:

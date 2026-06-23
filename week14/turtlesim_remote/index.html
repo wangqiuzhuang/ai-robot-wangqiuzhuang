@@ -121,8 +121,7 @@
     </div>
 
     <div class="button-row">
-      <button id="reset">🔄 重置</button>
-      <button id="auto" class="success">🤖 自动探索</button>
+      <button id="reset">🔄 重置到起点</button>
     </div>
 
     <div class="map-card">
@@ -157,17 +156,12 @@
       if (payload.type !== "state") return;
       const state = payload.data;
       latestState = state;
-      const a = state.auto || {};
       telemetryEl.textContent =
         `x: ${state.pose.x}  y: ${state.pose.y}  theta: ${state.pose.theta}\n` +
         `cmd: lin=${state.command.linear} ang=${state.command.angular}\n` +
         `applied: lin=${state.applied_command.linear} ang=${state.applied_command.angular}\n` +
         `blocked: ${state.rule.blocked} (${state.rule.reason})\n` +
-        `goal reached: ${state.rule.goal_reached}\n` +
-        `auto: ${a.enabled ? '🤖 ON' : '🖐️ OFF'} | waypoint: ${a.waypoint_idx || 0}`;
-      document.getElementById("auto").textContent =
-        a.enabled ? '⏹️ 停止自动' : '🤖 自动探索';
-      document.getElementById("auto").className = a.enabled ? 'warn' : 'success';
+        `goal reached: ${state.rule.goal_reached}`;
       drawMaze(state);
     };
 
@@ -184,16 +178,6 @@
     function resetMaze() {
       if (socket.readyState !== WebSocket.OPEN) return;
       socket.send(JSON.stringify({ type: "reset" }));
-    }
-
-    function toggleAuto() {
-      if (socket.readyState !== WebSocket.OPEN) return;
-      const enabled = latestState && latestState.auto && latestState.auto.enabled;
-      if (enabled) {
-        socket.send(JSON.stringify({ type: "stop" }));
-      } else {
-        socket.send(JSON.stringify({ type: "auto" }));
-      }
     }
 
     function bindHold(button) {
@@ -254,33 +238,6 @@
         mazeCtx.fillRect(ox, oy, ow, oh);
       });
 
-      // ── 自动路径 waypoints ──
-      if (latestState && latestState.auto && latestState.auto.waypoints) {
-        const wps = latestState.auto.waypoints;
-        mazeCtx.strokeStyle = "#f59e0b";
-        mazeCtx.lineWidth = 2;
-        mazeCtx.setLineDash([5, 5]);
-        mazeCtx.beginPath();
-        for (let i = 0; i < wps.length; i++) {
-          const wx = worldToCanvasX(wps[i][0], bounds);
-          const wy = worldToCanvasY(wps[i][1], bounds);
-          if (i === 0) mazeCtx.moveTo(wx, wy);
-          else mazeCtx.lineTo(wx, wy);
-        }
-        mazeCtx.stroke();
-        mazeCtx.setLineDash([]);
-
-        // 路标点
-        wps.forEach((wp, i) => {
-          const wx = worldToCanvasX(wp[0], bounds);
-          const wy = worldToCanvasY(wp[1], bounds);
-          mazeCtx.fillStyle = "#f59e0b";
-          mazeCtx.beginPath();
-          mazeCtx.arc(wx, wy, 3, 0, Math.PI * 2);
-          mazeCtx.fill();
-        });
-      }
-
       // 起点
       const sx = worldToCanvasX(state.maze.start.x, bounds);
       const sy = worldToCanvasY(state.maze.start.y, bounds);
@@ -321,7 +278,6 @@
     document.querySelectorAll("[data-linear]").forEach(bindHold);
     document.getElementById("stop").addEventListener("click", stopTurtle);
     document.getElementById("reset").addEventListener("click", resetMaze);
-    document.getElementById("auto").addEventListener("click", toggleAuto);
   </script>
 </body>
 </html>
