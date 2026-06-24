@@ -1,7 +1,8 @@
 # 🤖 AI 机器人课程实验与研究笔记
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-在线预览-brightgreen)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
-[![Weeks Completed](https://img.shields.io/badge/已完成-13%2F15周-blue)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
+[![Weeks Completed](https://img.shields.io/badge/已完成-14%2F15周-blue)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
+[![Stats](https://img.shields.io/badge/代码-2700+行-9cf)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
 [![Last Update](https://img.shields.io/badge/更新-2026.06-orange)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
 
 欢迎来到我的 AI 机器人课程学习与实践仓库。本项目完整记录了 **AI机器人2603学期** 课程期间的所有实验、核心配置、踩坑记录以及高级仿真成果。
@@ -36,10 +37,10 @@
 | **Week 09** | 机器人仿真环境与实践 | `Gazebo` `Webots` `URDF` | ✅ Done | [📝 查看笔记](week9/README.md) |
 | **Week 10** | Docker 卷挂载与 OpenCV 图像处理 | `Docker Volume` `OpenCV` `Python` | ✅ Done | [📝 查看笔记](week10/README.md) |
 | **Week 11** | Docker 镜像持久化与 Git 仓库整理 | `Docker Commit` `GitHub Pages` | ✅ Done | [📝 查看笔记](week11/README.md) |
-| **Week 12** | 四足机器人步态规划与高级仿真 ⭐ | `Webots/Gazebo` `Quadruped` `Gait` | ⏳ Optimizing | [📝 查看笔记](week12/README.md) |
+| **Week 12** | 远程摄像头流与 ArUco 标记识别 ⭐ | `Tailscale` `WebSocket` `ArUco` `OpenCV` | ✅ Done | [📝 查看笔记](week12/README.md) |
 | **Week 13** | 四足机器人仿真与强化学习 | `PyBullet` `PPO` `RL` | ✅ Done | [📝 查看笔记](week13/README.md) |
-| **Week 14** | 综合项目实战 | `待补充` | ⏳ Optimizing | |
-| **Week 15** | 期末总结与展示 | `待补充` | ⏳ Optimizing | |
+| **Week 14** | 综合项目实战 — turtlesim 迷宫自动探索 🏆 | `turtlesim` `A*` `BFS` `Web遥控` | ✅ Done | [📝 查看笔记](week14/README.md) |
+| **Week 15** | 期末总结与展示 | `待完成` | ⏳ Pending | |
 
 ---
 
@@ -97,6 +98,14 @@ ai-robot-wangqiuzhuang/
     ├── demos/             #   演示脚本
     ├── scripts/           #   工具脚本
     └── quadruped_ppo_residual_stairs.py  # 强化学习主程序
+├── week14/                # 🏆 综合项目 — turtlesim 迷宫
+│   ├── README.md          #   项目文档 + 实验过程
+│   ├── turtlesim_web_bridge.py  # 桥接程序（WebSocket ↔ ROS2）
+│   ├── explorer.py        #   路径规划（BFS / Dijkstra / A*）
+│   ├── maze.py            #   迷宫生成（递归回溯 + 编织）
+│   ├── index.html         #   手机遥控器网页
+│   ├── requirements.txt
+│   └── img/               #   实验截图
 ```
 
 ---
@@ -113,6 +122,22 @@ cd ai-robot-wangqiuzhuang/week12
 # 在线预览
 open https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/
 ```
+
+---
+
+---
+
+## 📊 仓库统计
+
+| 指标 | 数值 |
+|:---|---:|
+| 完成周次 | 14 |
+| Python 脚本 | 11 |
+| 截图 / GIF | 41+ |
+| AI 对话记录 | 4（W10-W13）|
+| 实验反思 | 4（W10-W13）|
+| 代码总行数 | 2,700+ |
+| 算法实现 | BFS · Dijkstra · A* · PPO · ArUco |
 
 ---
 
