@@ -12,7 +12,7 @@ Git 方面，最大的教训是 submodule 和 GitHub Pages 的兼容性问题。
 
 最大的坑是 GitHub Pages 部署的图片碎链。在本地 VS Code 预览完全正常，push 上去就全是 404。排查发现是相对路径的问题 —— Jekyll 的 `baseurl` 和 `relative_url` 过滤器必须正确配置 `_config.yml` 才能工作。我的问题出在：图片引用用了 `![img](week11/img/xxx.png)` 而没有加 `/ai-robot-wangqiuzhuang/` 前缀。
 
-解决方式有两个方向：一是在 `_config.yml` 里正确设置 `baseurl`，然后所有链接用 `{% raw %}{{ site.baseurl }}{% endraw %}` 前缀；二是直接用相对于仓库根的路径。我选了第二种，因为更简单直接，不依赖 Jekyll 变量。
+解决方式有两个方向：一是在 `_config.yml` 里正确设置 `baseurl`，然后所有链接用 `site.baseurl` 变量前缀；二是直接用相对于仓库根的路径。我选了第二种，因为更简单直接，不依赖 Jekyll 变量。
 
 另一个坑是 `docker commit` 后镜像体积暴增。查了一下发现是容器里 `apt update` 的缓存和 ROS2 log 没有清理。养成习惯：commit 前 `apt clean && rm -rf /var/lib/apt/lists/* && rosclean purge`。
 
