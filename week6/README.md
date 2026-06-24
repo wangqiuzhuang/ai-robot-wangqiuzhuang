@@ -123,3 +123,29 @@ rqt
 4. **多视角理解**：通过摄像头视角切换加深了对自动驾驶感知系统的整体认识
 
 为后续 Docker 容器中的传感器处理和四足机器人感知模块开发提供了数据基础。
+
+## 代码说明
+
+**`kitti_publisher.py`** — KITTI 数据集发布器
+- 遍历 KITTI 目录中的图像 (`.png`) 和点云 (`.bin`) 文件
+- 按帧对齐发布，支持循环播放和倍速控制
+- 自动统计每帧的点云数量和图像尺寸
+
+**`kitti_visualizer.py`** — 点云可视化与分析工具
+- 加载 Velodyne HDL-64E 点云 `.bin` 文件
+- 统计分析：点数、X/Y/Z 范围、反射强度分布、距离分布
+- ROI 过滤：按前向距离、横向范围、高度裁剪
+- 生成鸟瞰图 (XY 投影) 和侧视图 (XZ 投影)
+
+## 运行方式
+
+```bash
+pip install numpy matplotlib opencv-python
+cd week6
+
+# 发布 KITTI 数据
+python3 kitti_publisher.py --data_dir /path/to/KITTI --rate 10
+
+# 点云可视化
+python3 kitti_visualizer.py /path/to/000000.bin bev_output.png
+```

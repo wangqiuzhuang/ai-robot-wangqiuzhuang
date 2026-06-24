@@ -110,3 +110,26 @@ docker run wangqiuzhuang
 ## 总结
 
 本周完成了两个重要任务：一是掌握了 Docker 容器的镜像持久化技巧，通过 `docker commit` 将配置好的环境保存为自定义镜像；二是学习了 Git 仓库的规范化整理方法，理解了 GitHub Pages 部署流程，为课程作业的展示和评分做好了准备。
+
+## 代码说明
+
+**`docker_commit.sh`** — Docker 镜像持久化工具
+- 三个子命令：`list` (查看容器) / `commit` (保存镜像) / `verify` (验证镜像)
+- 自动验证容器存在性和 commit 成功后输出使用新镜像的命令
+- 支持自定义作者、描述信息等 commit 参数
+
+## 运行方式
+
+```bash
+cd week11
+chmod +x docker_commit.sh
+
+# 查看运行中的容器
+./docker_commit.sh list
+
+# 保存容器为新镜像
+./docker_commit.sh commit <容器ID> wangqiuzhuang/custom
+
+# 验证镜像
+./docker_commit.sh verify wangqiuzhuang/custom
+```

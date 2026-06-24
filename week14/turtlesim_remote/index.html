@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>turtlesim 遥控器 · W14 综合项目</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: #0b1120;
+      color: #e2e8f0;
+      font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    .panel {
+      width: min(440px, 100%);
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 20px;
+    }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 .badge {
+      font-size: 11px;
+      background: #7c3aed;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: normal;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 14px;
+    }
+    .status-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .status {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .status.connected { background: #065f46; color: #6ee7b7; }
+    .status.disconnected { background: #7f1d1d; color: #fca5a5; }
+    .status.auto-on { background: #4c1d95; color: #c4b5fd; }
+    .status.goal { background: #166534; color: #86efac; animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .pad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 8px 0 14px;
+    }
+    button {
+      min-height: 68px;
+      border: none;
+      border-radius: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      background: #0ea5e9;
+      color: white;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+    button:active { filter: brightness(1.3); }
+    button.danger { background: #dc2626; }
+    button.auto-btn { background: #7c3aed; }
+    button.auto-btn.active { background: #f59e0b; color: #0f172a; }
+    button.reset-btn { background: #475569; }
+
+    .algo-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .algo-row button {
+      flex: 1;
+      min-height: 38px;
+      font-size: 13px;
+      background: #334155;
+    }
+    .algo-row button.selected {
+      background: #0ea5e9;
+      box-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
+    }
+
+    .stats {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .telemetry {
+      font-family: "SF Mono", Consolas, monospace;
+      background: #020617;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      margin-bottom: 14px;
+    }
+
+    .map-card {
+      background: #020617;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .map-card h2 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+    canvas {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      background: #f1f5f9;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>
+      🐢 turtlesim 遥控器
+      <span class="badge">W14</span>
+    </h1>
+    <p class="subtitle">手机和电脑在同一 Tailscale 网络 · 长按方向键控制 · 松开停止</p>
+
+    <div class="status-bar">
+      <div id="status" class="status disconnected">🔌 未连接</div>
+      <div id="autoStatus" class="status auto-on" style="display:none">🤖 自动探索中</div>
+      <div id="goalStatus" class="status goal" style="display:none">🏁 到达终点!</div>
+    </div>
+
+    <!-- 算法选择器 -->
+    <div class="algo-row">
+      <button id="algoBFS" class="algo-btn">BFS</button>
+      <button id="algoDijkstra" class="algo-btn">Dijkstra</button>
+      <button id="algoAstar" class="algo-btn selected">A*</button>
+    </div>
+    <div id="algoStats" class="stats">选择路径规划算法</div>
+
+    <!-- 方向键 -->
+    <div class="pad">
+      <div></div>
+      <button data-linear="2.0" data-angular="0.0">↑</button>
+      <div></div>
+      <button data-linear="0.0" data-angular="2.0">←</button>
+      <button id="stop" class="danger">■</button>
+      <button data-linear="0.0" data-angular="-2.0">→</button>
+      <div></div>
+      <button data-linear="-2.0" data-angular="0.0">↓</button>
+      <div></div>
+    </div>
+
+    <!-- 功能按钮 -->
+    <div class="algo-row">
+      <button id="reset" class="reset-btn">↺ 重置</button>
+      <button id="autoToggle" class="auto-btn">🤖 自动探索</button>
+    </div>
+
+    <!-- 遥测 -->
+    <div id="telemetry" class="telemetry">等待乌龟状态…</div>
+
+    <!-- 迷宫预览 -->
+    <div class="map-card">
+      <h2>🗺️ 迷宫预览</h2>
+      <canvas id="mazeCanvas" width="360" height="360"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const statusEl = document.getElementById("status");
+    const autoStatusEl = document.getElementById("autoStatus");
+    const goalStatusEl = document.getElementById("goalStatus");
+    const telemetryEl = document.getElementById("telemetry");
+    const algoStatsEl = document.getElementById("algoStats");
+    const mazeCanvas = document.getElementById("mazeCanvas");
+    const mazeCtx = mazeCanvas.getContext("2d");
+
+    const wsScheme = location.protocol === "https:" ? "wss" : "ws";
+    const socket = new WebSocket(`${wsScheme}://${location.host}/ws`);
+    let latestState = null;
+    let autoEnabled = false;
+    let currentAlgo = "astar";
+
+    socket.onopen = () => {
+      statusEl.textContent = "🔗 已连接";
+      statusEl.className = "status connected";
+    };
+
+    socket.onclose = () => {
+      statusEl.textContent = "🔌 连接断开";
+      statusEl.className = "status disconnected";
+    };
+
+    socket.onmessage = (event) => {
+      const payload = JSON.parse(event.data);
+      if (payload.type !== "state") return;
+      const state = payload.data;
+      latestState = state;
+
+      // 更新自动探索状态
+      if (state.auto) {
+        autoEnabled = state.auto.enabled;
+        autoStatusEl.style.display = state.auto.enabled ? "inline-block" : "none";
+        const btn = document.getElementById("autoToggle");
+        btn.textContent = state.auto.enabled ? "⏹ 停止探索" : "🤖 自动探索";
+        btn.className = state.auto.enabled ? "auto-btn active" : "auto-btn";
+
+        if (state.auto.stats && state.auto.stats.nodes_expanded > 0) {
+          algoStatsEl.textContent =
+            `${state.auto.stats.algorithm} · 扩展节点: ${state.auto.stats.nodes_expanded} · 路径长度: ${state.auto.stats.path_length}`;
+        }
+      }
+
+      // 终点状态
+      goalStatusEl.style.display = state.rule.goal_reached ? "inline-block" : "none";
+
+      // 遥测
+      telemetryEl.textContent =
+        `📍 位置: (${state.pose.x}, ${state.pose.y})  θ=${state.pose.theta}°\n` +
+        `🎮 指令: lin=${state.command.linear}  ang=${state.command.angular}\n` +
+        `⚡ 实际: lin=${state.applied_command.linear}  ang=${state.applied_command.angular}\n` +
+        `🛡️ 状态: ${state.rule.blocked ? "⛔ " + state.rule.reason : "✅ " + state.rule.reason}` +
+        (state.rule.goal_reached ? "\n🏆 迷宫已通关！" : "");
+
+      drawMaze(state);
+    };
+
+    function sendMsg(obj) {
+      if (socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify(obj));
+    }
+
+    function sendCommand(linear, angular) { sendMsg({ type: "command", linear, angular }); }
+    function stopTurtle() { sendMsg({ type: "stop" }); }
+    function resetMaze() { sendMsg({ type: "reset" }); }
+    function toggleAuto() {
+      sendMsg({ type: autoEnabled ? "auto_off" : "auto_on" });
+    }
+    function setAlgorithm(algo) {
+      currentAlgo = algo;
+      document.querySelectorAll(".algo-btn").forEach(b => b.classList.remove("selected"));
+      document.getElementById("algo" + algo.charAt(0).toUpperCase() + algo.slice(1)).classList.add("selected");
+      sendMsg({ type: "set_algorithm", algorithm: algo });
+    }
+
+    // 方向键 — 长按控制
+    function bindHold(button) {
+      const linear = Number(button.dataset.linear);
+      const angular = Number(button.dataset.angular);
+      button.addEventListener("mousedown", (e) => { e.preventDefault(); sendCommand(linear, angular); });
+      button.addEventListener("mouseup", (e) => { e.preventDefault(); stopTurtle(); });
+      button.addEventListener("mouseleave", (e) => { e.preventDefault(); stopTurtle(); });
+      button.addEventListener("touchstart", (e) => { e.preventDefault(); sendCommand(linear, angular); }, { passive: false });
+      button.addEventListener("touchend", (e) => { e.preventDefault(); stopTurtle(); }, { passive: false });
+      button.addEventListener("touchcancel", (e) => { e.preventDefault(); stopTurtle(); }, { passive: false });
+    }
+
+    // Canvas 坐标转换
+    function wx(x, bounds) { return 20 + ((x - bounds.min_x) / (bounds.max_x - bounds.min_x)) * (mazeCanvas.width - 40); }
+    function wy(y, bounds) { return mazeCanvas.height - 20 - ((y - bounds.min_y) / (bounds.max_y - bounds.min_y)) * (mazeCanvas.height - 40); }
+
+    function drawMaze(state) {
+      const b = state.maze.bounds;
+      mazeCtx.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
+      mazeCtx.fillStyle = "#f8fafc";
+      mazeCtx.fillRect(0, 0, mazeCanvas.width, mazeCanvas.height);
+
+      // 边界
+      mazeCtx.strokeStyle = "#0f172a";
+      mazeCtx.lineWidth = 3;
+      mazeCtx.strokeRect(wx(b.min_x, b), wy(b.max_y, b), wx(b.max_x, b) - wx(b.min_x, b), wy(b.min_y, b) - wy(b.max_y, b));
+
+      // 障碍物
+      mazeCtx.fillStyle = "#475569";
+      state.maze.obstacles.forEach(o => {
+        const ox = wx(o.x, b), oy = wy(o.y + o.h, b);
+        const ow = wx(o.x + o.w, b) - ox, oh = wy(o.y, b) - oy;
+        mazeCtx.fillRect(ox, oy, ow, oh);
+      });
+
+      // 起点（绿）
+      const s = state.maze.start;
+      mazeCtx.fillStyle = "#22c55e";
+      mazeCtx.beginPath();
+      mazeCtx.arc(wx(s.x, b), wy(s.y, b), 9, 0, Math.PI * 2);
+      mazeCtx.fill();
+
+      // 终点（金）
+      const g = state.maze.goal;
+      mazeCtx.fillStyle = "#f59e0b";
+      mazeCtx.beginPath();
+      mazeCtx.arc(wx(g.x, b), wy(g.y, b), g.radius * 20, 0, Math.PI * 2);
+      mazeCtx.fill();
+
+      // 乌龟
+      const tx = wx(state.pose.x, b), ty = wy(state.pose.y, b);
+      mazeCtx.fillStyle = state.rule.blocked ? "#ef4444" : (state.rule.goal_reached ? "#22c55e" : "#3b82f6");
+      mazeCtx.beginPath();
+      mazeCtx.arc(tx, ty, state.maze.turtle_radius * 18, 0, Math.PI * 2);
+      mazeCtx.fill();
+
+      // 朝向指示
+      mazeCtx.strokeStyle = "#0f172a";
+      mazeCtx.lineWidth = 3;
+      mazeCtx.beginPath();
+      mazeCtx.moveTo(tx, ty);
+      mazeCtx.lineTo(tx + Math.cos(state.pose.theta) * 24, ty - Math.sin(state.pose.theta) * 24);
+      mazeCtx.stroke();
+    }
+
+    // 绑定事件
+    document.querySelectorAll("[data-linear]").forEach(bindHold);
+    document.getElementById("stop").addEventListener("click", stopTurtle);
+    document.getElementById("reset").addEventListener("click", resetMaze);
+    document.getElementById("autoToggle").addEventListener("click", toggleAuto);
+    document.getElementById("algoBFS").addEventListener("click", () => setAlgorithm("bfs"));
+    document.getElementById("algoDijkstra").addEventListener("click", () => setAlgorithm("dijkstra"));
+    document.getElementById("algoAstar").addEventListener("click", () => setAlgorithm("astar"));
+  </script>
+</body>
+</html>

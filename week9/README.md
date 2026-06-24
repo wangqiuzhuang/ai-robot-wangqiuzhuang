@@ -187,3 +187,36 @@ ros2 launch urdf_tutorial display.launch.py model:=robot.urdf
 4. **工具对比**：理解了 Gazebo 和 Webots 的各自优势与适用场景
 
 这些仿真能力为 Week 12-13 的四足机器人步态规划和强化学习实验提供了虚拟测试环境。
+
+## 作业截图
+
+![Gazebo仿真环境](img/gazebo_world.png)
+![URDF模型可视化](img/urdf_rviz.png)
+
+## 代码说明
+
+**`check_urdf.py`** — URDF 模型语法检查工具
+- 解析 URDF XML 文件，验证基本结构
+- 检查每个 `<link>` 是否有惯性参数 `<inertial>`
+- 验证 `<joint>` 的 parent/child 引用是否正确
+- 输出 robots name、links/joints 数量及错误/警告
+
+**`empty_world.sdf`** — Gazebo 仿真世界配置文件
+- 包含地面、光照、重力 (9.81 m/s²)
+- 使用 ODE 物理引擎，1ms 步长
+- 可作为自定义仿真环境的起点
+
+## 运行方式
+
+```bash
+cd week9
+
+# URDF 检查 (检查 week8 的机器人模型)
+python3 check_urdf.py ../week8/my_robot.urdf
+
+# Gazebo 启动
+gazebo empty_world.sdf
+
+# 或者 ROS2 方式启动
+ros2 launch gazebo_ros gazebo.launch.py world:=./empty_world.sdf
+```

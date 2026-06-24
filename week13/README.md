@@ -199,7 +199,21 @@ Trot 步态：
 - 最明显的进步：能够稳定站立并稳定行走.
 - 仍然存在的问题：走的时间
 
+## 作业交付物
 
+| 文件 | 说明 |
+|:---|:---|
+| `quadruped_walk.py` | 四足机器人行走代码 (Trot 步态 + PPO 控制) |
+| `ai_chat_log.md` | AI 辅助调试对话日志 (6 轮对话，覆盖环境配置、步态生成、PPO 调优) |
+| `reflection.md` | 学习反思 (3 个问题，约 1350 字) |
+
+## 验证
+
+```bash
+python -m py_compile week13/demos/04_trot_gait.py
+python3 week13/demos/04_trot_gait.py
+python3 week13/quadruped_ppo_residual_stairs.py demo --task stairs --model week13/ppo_residual_stairs.zip --stair_steps 4 --step_height 0.03 --init_x 0.00 --steps 500 --gui
+```
 
 提交作业：
 

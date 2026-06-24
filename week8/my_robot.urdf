@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<!--
+Week 8: 自定义移动机器人 URDF 模型
+====================================
+一个差分驱动移动机器人的统一描述格式 (URDF) 模型。
+
+结构:
+  base_footprint (虚拟基座)
+    └── base_link (底盘)
+        ├── left_wheel (左驱动轮)
+        ├── right_wheel (右驱动轮)
+        ├── front_caster (前万向轮)
+        └── lidar_frame (激光雷达安装位)
+
+运行方式:
+  ros2 launch urdf_tutorial display.launch.py model:=./week8/my_robot.urdf
+  # 或在 RViz2 中加载 RobotModel，设置 robot_description 参数
+-->
+<robot name="my_diff_drive_robot">
+
+  <!-- ===== 材料定义 ===== -->
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.6 0.6 0.6 1.0"/>
+  </material>
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+
+  <!-- ===== 1. 虚拟基座 (base_footprint) ===== -->
+  <!-- 这是机器人在地面上的投影点，用于导航和定位 -->
+  <link name="base_footprint">
+    <visual>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <!-- ===== 2. 底盘 (base_link) ===== -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <!-- 矩形底盘: 长×宽×高 = 0.4×0.3×0.1 m -->
+        <box size="0.4 0.3 0.1"/>
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.4 0.3 0.1"/>
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="5.0"/>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0"
+                iyy="0.05" iyz="0.0" izz="0.1"/>
+    </inertial>
+  </link>
+
+  <!-- base_footprint → base_link 固定连接 -->
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ===== 3. 左驱动轮 ===== -->
+  <link name="left_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.06" length="0.04"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.06" length="0.04"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+                iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="0 0.18 -0.05" rpy="0 0 0"/>  <!-- 左侧，轮半径 0.06m -->
+    <axis xyz="0 1 0"/>
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <!-- ===== 4. 右驱动轮 ===== -->
+  <link name="right_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.06" length="0.04"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.06" length="0.04"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+                iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0 -0.18 -0.05" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <!-- ===== 5. 前万向轮 (支撑) ===== -->
+  <link name="front_caster">
+    <visual>
+      <geometry>
+        <sphere radius="0.03"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.03"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="front_caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_caster"/>
+    <origin xyz="0.15 0 -0.07" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ===== 6. 激光雷达安装位 ===== -->
+  <link name="lidar_frame">
+    <visual>
+      <geometry>
+        <cylinder radius="0.04" length="0.04"/>
+      </geometry>
+      <origin xyz="0 0 0.02" rpy="0 0 0"/>
+      <material name="red"/>
+    </visual>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_frame"/>
+    <origin xyz="0.15 0 0.08" rpy="0 0 0"/>  <!-- 安装在底盘前上方 -->
+  </joint>
+
+</robot>

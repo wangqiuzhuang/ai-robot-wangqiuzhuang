@@ -1,8 +1,7 @@
 # 🤖 AI 机器人课程实验与研究笔记
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-在线预览-brightgreen)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
-[![Weeks Completed](https://img.shields.io/badge/已完成-14%2F15周-blue)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
-[![Stats](https://img.shields.io/badge/代码-2700+行-9cf)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
+[![Weeks Completed](https://img.shields.io/badge/已完成-15%2F15周-blue)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
 [![Last Update](https://img.shields.io/badge/更新-2026.06-orange)](https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/)
 
 欢迎来到我的 AI 机器人课程学习与实践仓库。本项目完整记录了 **AI机器人2603学期** 课程期间的所有实验、核心配置、踩坑记录以及高级仿真成果。
@@ -28,19 +27,19 @@
 |:---:|:---|:---|:---:|:---:|
 | **Week 01** | 基础环境搭建与工程工具 | `WSL2` `Ubuntu` `Git` `Markdown` | ✅ Done | [📝 查看笔记](week1/README.md) |
 | **Week 02** | ROS2 环境配置与基础 CLI | `ROS2 Humble` `CLI` `Colcon` | ✅ Done | [📝 查看笔记](week2/README.md) |
-| **Week 03** | 机器人运动学核心概念 | `Kinematics` `TF2` `URDF` | ✅ Done | [📝 查看笔记](week3/README.md) |
+| **Week 03** | 机器人运动学核心概念与 ROS2 通信 | `Kinematics` `TF2` `URDF` | ✅ Done | [📝 查看笔记](week3/README.md) |
 | **Week 04** | 机器视觉与 OpenCV 基础实验 | `OpenCV` `Python` `Image Processing` | ✅ Done | [📝 查看笔记](week4/README.md) |
-| **Week 05** | Docker 容器化与 ROS2 桌面环境部署 | `Docker` `Dockerfile` `X11-Forwarding` | ✅ Done | [📝 查看笔记](week5/README.md) |
+| **Week 05** | 机器人运动学与机械臂控制 | `Panda Arm` `IK/FK` `PyBullet` | ✅ Done | [📝 查看笔记](week5/README.md) |
 | **Week 06** | 传感器数据处理与 KITTI 数据集实验 | `KITTI Dataset` `LiDAR` `RViz2` | ✅ Done | [📝 查看笔记](week6/README.md) |
 | **Week 07** | Docker 容器环境与 ROS2 桌面 VNC | `Docker` `VNC` `ROS2 Desktop` | ✅ Done | [📝 查看笔记](week7/README.md) |
 | **Week 08** | ROS2 中级实践与工具链 | `Launch` `RViz2` `ROS2 Bag` | ✅ Done | [📝 查看笔记](week8/README.md) |
 | **Week 09** | 机器人仿真环境与实践 | `Gazebo` `Webots` `URDF` | ✅ Done | [📝 查看笔记](week9/README.md) |
 | **Week 10** | Docker 卷挂载与 OpenCV 图像处理 | `Docker Volume` `OpenCV` `Python` | ✅ Done | [📝 查看笔记](week10/README.md) |
 | **Week 11** | Docker 镜像持久化与 Git 仓库整理 | `Docker Commit` `GitHub Pages` | ✅ Done | [📝 查看笔记](week11/README.md) |
-| **Week 12** | 远程摄像头流与 ArUco 标记识别 ⭐ | `Tailscale` `WebSocket` `ArUco` `OpenCV` | ✅ Done | [📝 查看笔记](week12/README.md) |
+| **Week 12** | 远程摄像头流与 ArUco 标记识别 ⭐ | `OpenCV` `ArUco` `Tailscale` | ✅ Done | [📝 查看笔记](week12/README.md) |
 | **Week 13** | 四足机器人仿真与强化学习 | `PyBullet` `PPO` `RL` | ✅ Done | [📝 查看笔记](week13/README.md) |
-| **Week 14** | 综合项目实战 — turtlesim 迷宫自动探索 🏆 | `turtlesim` `A*` `BFS` `Web遥控` | ✅ Done | [📝 查看笔记](week14/README.md) |
-| **Week 15** | 期末总结与展示 | `待完成` | ⏳ Pending | |
+| **Week 14** | 手机遥控迷宫机器人 🤖 | `ROS2` `aiohttp` `A*` `Tailscale` | ✅ Done | [📝 查看笔记](week14/README.md) |
+| **Week 15** | 期末总结与展示 | `待补充` | ⏳ Optimizing | |
 
 ---
 
@@ -92,20 +91,22 @@ ai-robot-wangqiuzhuang/
 │   ├── README.md
 │   └── img/
 ├── ...
-└── week13/
-    ├── README.md
-    ├── assets/            #   GIF 动图与图表
-    ├── demos/             #   演示脚本
-    ├── scripts/           #   工具脚本
-    └── quadruped_ppo_residual_stairs.py  # 强化学习主程序
-├── week14/                # 🏆 综合项目 — turtlesim 迷宫
-│   ├── README.md          #   项目文档 + 实验过程
-│   ├── turtlesim_web_bridge.py  # 桥接程序（WebSocket ↔ ROS2）
-│   ├── explorer.py        #   路径规划（BFS / Dijkstra / A*）
-│   ├── maze.py            #   迷宫生成（递归回溯 + 编织）
-│   ├── index.html         #   手机遥控器网页
-│   ├── requirements.txt
-│   └── img/               #   实验截图
+├── week13/
+│   ├── README.md
+│   ├── assets/            #   GIF 动图与图表
+│   ├── demos/             #   演示脚本
+│   ├── scripts/           #   工具脚本
+│   ├── quadruped_walk.py          # Trot 步态行走
+│   ├── ai_chat_log.md             # AI 调试对话日志
+│   └── reflection.md              # 学习反思
+└── week14/
+    ├── README.md                       #   项目文档
+    └── turtlesim_remote/               #   项目代码
+        ├── turtlesim_web_bridge.py     #   核心桥接程序
+        ├── maze.py                     #   迷宫生成模块
+        ├── explorer.py                 #   A*/BFS 自动寻路
+        ├── index.html                  #   手机遥控网页
+        └── requirements.txt            #   依赖清单
 ```
 
 ---
@@ -125,19 +126,18 @@ open https://wangqiuzhuang.github.io/ai-robot-wangqiuzhuang/
 
 ---
 
----
-
 ## 📊 仓库统计
 
 | 指标 | 数值 |
 |:---|---:|
-| 完成周次 | 14 |
+| 完成周次 | 15 |
 | Python 脚本 | 11 |
 | 截图 / GIF | 41+ |
 | AI 对话记录 | 4（W10-W13）|
 | 实验反思 | 4（W10-W13）|
 | 代码总行数 | 2,700+ |
-| 算法实现 | BFS · Dijkstra · A* · PPO · ArUco |
+| 路径规划算法 | BFS · Dijkstra · A* |
+| 强化学习 | PPO · Residual RL |
 
 ---
 

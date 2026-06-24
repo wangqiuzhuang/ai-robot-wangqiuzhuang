@@ -220,3 +220,33 @@ WebSocket 一次握手后每帧仅 2-6 bytes 帧头，延迟 ~5-10ms。
 - 移动端 AI 推理前置（手机端跑轻量模型 → 结果回传）
 - 多机器人协同视觉（多台手机 → 中心节点多目标跟踪）
 - AR 定位系统（环境 ArUco 标记 → 机器人自定位）
+
+## 代码说明
+
+**`aruco_detect.py`** — ArUco 标记实时检测器
+- 支持 4×4 / 5×5 / 6×6 / 7×7 四种 ArUco 字典
+- 实时摄像头检测模式：逐帧检测标记并绘制边框和 ID
+- 单图检测模式：检测图片中的标记并保存标注结果
+- 按 's' 截图保存，按 'q' 退出
+
+**`camera_server.py`** — 手机摄像头 WebSocket 服务器
+- Flask + SocketIO 实现手机浏览器到 WSL 的图像流传输
+- HTML5 getUserMedia 调用手机摄像头
+- Base64 JPEG 编码传输，服务器端 OpenCV 解码
+- 预留 ArUco 检测接口
+
+## 运行方式
+
+```bash
+pip install opencv-contrib-python flask flask-socketio
+cd week12
+
+# ArUco 实时检测 (需要摄像头)
+python3 aruco_detect.py
+
+# 或检测单张图片
+python3 aruco_detect.py --image test.jpg
+
+# 手机摄像头服务器 (手机浏览器访问 http://<wsl-ip>:5000)
+python3 camera_server.py
+```
